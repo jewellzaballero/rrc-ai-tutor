@@ -93,14 +93,17 @@ export default function Projects() {
         <main className="p-6 overflow-y-auto flex-1">
           {/* Create New Project Button */}
           <div className="mb-8">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2">
+            <Link 
+              to="/course-selection"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 w-fit"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <line x1="12" y1="8" x2="12" y2="16" />
                 <line x1="8" y1="12" x2="16" y2="12" />
               </svg>
               New Project
-            </button>
+            </Link>
           </div>
 
           {/* Projects Grid */}
@@ -171,9 +174,12 @@ export default function Projects() {
               <p className="text-gray-600 dark:text-gray-400 mb-6">
                 Get started by creating your first learning project
               </p>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+              <Link 
+                to="/course-selection"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-block"
+              >
                 Create Your First Project
-              </button>
+              </Link>
             </div>
           )}
         </main>
