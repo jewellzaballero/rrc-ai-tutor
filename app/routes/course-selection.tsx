@@ -262,9 +262,12 @@ export default function CourseSelection() {
 
                 {/* Action Button */}
                 <div className="mt-auto">
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors">
+                  <Link
+                    to={`/course-setup?course=${encodeURIComponent(course.code)}&courseName=${encodeURIComponent(course.name)}`}
+                    className="block w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors text-center"
+                  >
                     Create Project
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
