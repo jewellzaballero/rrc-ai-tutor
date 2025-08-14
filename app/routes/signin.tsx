@@ -14,10 +14,10 @@ export async function action({ request }: Route.ActionArgs) {
   const password = formData.get("password");
 
   // Here you would typically validate credentials
-  // For now, we'll just redirect to home page
+  // For now, we'll just redirect to dashboard page
   console.log("Login attempt:", { studentNumber, password });
   
-  return redirect("/");
+  return redirect("/dashboard");
 }
 
 export default function SignIn() {
