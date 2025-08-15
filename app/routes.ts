@@ -5,6 +5,7 @@ export default [
   route("/signin", "routes/signin.tsx"),
   route("/dashboard", "routes/dashboard.tsx"),
   route("/projects", "routes/projects.tsx"),
+  route("/project-sessions/:projectId", "routes/project-sessions.$projectId.tsx"),
   route("/chat", "routes/chat.tsx"),
   route("/course-selection", "routes/course-selection.tsx"),
   route("/course-setup", "routes/course-setup.tsx")
