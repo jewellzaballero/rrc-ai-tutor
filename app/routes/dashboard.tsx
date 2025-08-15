@@ -66,9 +66,12 @@ export default function Dashboard() {
             <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">
               Start a new AI-powered study session or continue where you left off.
             </p>
-            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+            <Link
+              to="/start-learning"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors block text-center"
+            >
               Start Learning
-            </button>
+            </Link>
           </div>
 
           {/* Progress Card */}
