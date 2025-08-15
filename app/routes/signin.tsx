@@ -50,7 +50,7 @@ export default function SignIn() {
                 <input
                   id="studentNumber"
                   name="studentNumber"
-                  type="tel"
+                  type="number"
                   required
                   pattern="[0-9]*"
                   placeholder="Enter your student number"
