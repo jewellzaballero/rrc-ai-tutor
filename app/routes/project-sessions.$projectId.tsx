@@ -75,7 +75,7 @@ export default function ProjectSessions() {
                 </p>
               </div>
               <Link
-                to="/chat"
+                to={`/chat?sessionId=new&course=${encodeURIComponent(projectTitle)}`}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

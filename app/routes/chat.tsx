@@ -23,6 +23,7 @@ interface ChatSession {
 export default function Chat() {
   const [searchParams] = useSearchParams();
   const sessionIdParam = searchParams.get("sessionId");
+  const courseParam = searchParams.get("course");
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(sessionIdParam);
 
   // If no session is selected, show the session selector
@@ -31,7 +32,11 @@ export default function Chat() {
   }
 
   // Show the chat interface for the selected session
-  return <ChatInterface sessionId={currentSessionId} onBackToSessions={() => setCurrentSessionId(null)} />;
+  return <ChatInterface 
+    sessionId={currentSessionId} 
+    courseName={courseParam} 
+    onBackToSessions={() => setCurrentSessionId(null)} 
+  />;
 }
 
 // Session Selector Component
@@ -173,7 +178,7 @@ function SessionSelector({ onSelectSession }: { onSelectSession: (sessionId: str
 }
 
 // Chat Interface Component
-function ChatInterface({ sessionId, onBackToSessions }: { sessionId: string; onBackToSessions: () => void }) {
+function ChatInterface({ sessionId, courseName, onBackToSessions }: { sessionId: string; courseName?: string | null; onBackToSessions: () => void }) {
   const currentSession = sessionId === 'new' ? null : recentSessions.find(s => s.id === sessionId);
   
   return (
@@ -197,10 +202,15 @@ function ChatInterface({ sessionId, onBackToSessions }: { sessionId: string; onB
               </button>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {currentSession ? currentSession.title : "New AI Chat Session"}
+                  {currentSession ? currentSession.title : courseName ? `New ${courseName} Chat Session` : "New AI Chat Session"}
                 </h1>
                 <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  {currentSession ? currentSession.course : "Start a fresh conversation with your AI tutor"}
+                  {currentSession 
+                    ? currentSession.course 
+                    : courseName 
+                      ? `Start a fresh conversation about ${courseName} with your AI tutor`
+                      : "Start a fresh conversation with your AI tutor"
+                  }
                 </p>
               </div>
             </div>
@@ -224,7 +234,10 @@ function ChatInterface({ sessionId, onBackToSessions }: { sessionId: string; onB
                 </div>
                 <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl px-4 py-3 max-w-lg">
                   <p className="text-sm leading-relaxed text-gray-900 dark:text-white">
-                    Hi! I'm your AI tutor. I'm here to help you with your studies. What would you like to learn about today?
+                    {courseName 
+                      ? `Hi! I'm your AI tutor. I'm ready to help you with ${courseName}. What specific topics or concepts would you like to explore together?`
+                      : "Hi! I'm your AI tutor. I'm here to help you with your studies. What would you like to learn about today?"
+                    }
                   </p>
                   <div className="text-xs mt-2 text-gray-500 dark:text-gray-400">
                     Just now
