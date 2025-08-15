@@ -16,11 +16,11 @@ export async function action({ request }: Route.ActionArgs) {
   // Here you would process the form data and create the project
   console.log("Project setup data:", Object.fromEntries(formData));
   
-  // For now, redirect back to projects page
+  // Redirect to chat page to start learning with the AI tutor
   return new Response(null, {
     status: 302,
     headers: {
-      Location: "/projects"
+      Location: "/chat"
     }
   });
 }
