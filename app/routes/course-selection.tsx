@@ -1,9 +1,8 @@
-import type { Route } from "./+types/course-selection";
 import { Link } from "react-router";
 import { useState } from "react";
 import { SideNavigation } from "../components/SideNavigation";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Course Selection - RRC AI Tutor" },
     { name: "description", content: "Select a course to create a new project" },

@@ -1,8 +1,7 @@
-import type { Route } from "./+types/projects";
 import { Link } from "react-router";
 import { SideNavigation } from "../components/SideNavigation";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Projects - RRC AI Tutor" },
     { name: "description", content: "Manage your learning projects and assignments" },

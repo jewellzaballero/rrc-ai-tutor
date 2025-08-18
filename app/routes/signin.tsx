@@ -1,27 +1,27 @@
-import type { Route } from "./+types/signin";
-import { Form, redirect, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Sign In - RRC AI Tutor" },
     { name: "description", content: "Sign in to your RRC AI Tutor account" },
   ];
 }
 
-export async function action({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  const studentNumber = formData.get("studentNumber");
-  const password = formData.get("password");
-
-  // Here you would typically validate credentials
-  // For now, we'll just redirect to dashboard page
-  console.log("Login attempt:", { studentNumber, password });
-  
-  return redirect("/dashboard");
-}
-
 export default function SignIn() {
   const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const studentNumber = formData.get("studentNumber");
+    const password = formData.get("password");
+
+    // Here you would typically validate credentials
+    // For now, we'll just redirect to dashboard page
+    console.log("Login attempt:", { studentNumber, password });
+    
+    navigate("/dashboard");
+  };
 
   return (
     <main className="flex items-center justify-center min-h-screen pt-16 pb-4">
@@ -39,7 +39,7 @@ export default function SignIn() {
 
         <div className="w-full space-y-6">
           <div className="rounded-3xl border border-gray-200 p-8 dark:border-gray-700 bg-white dark:bg-gray-900">
-            <Form method="post" className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label 
                   htmlFor="studentNumber" 
@@ -81,7 +81,7 @@ export default function SignIn() {
               >
                 Login
               </button>
-            </Form>
+            </form>
 
             <div className="mt-6 text-center">
               <button

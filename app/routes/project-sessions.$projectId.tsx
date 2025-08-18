@@ -1,9 +1,8 @@
-import type { Route } from "./+types/project-sessions.$projectId";
-import { Link, useParams, useSearchParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { useState } from "react";
 import { SideNavigation } from "../components/SideNavigation";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Project Sessions - RRC AI Tutor" },
     { name: "description", content: "View your AI chat sessions for this project" },
@@ -24,9 +23,8 @@ interface ChatSession {
 
 export default function ProjectSessions() {
   const params = useParams();
-  const [searchParams] = useSearchParams();
   const projectId = params.projectId;
-  const projectTitle = searchParams.get("title") || "Project";
+  const projectTitle = "Project";
   
   const [sessions, setSessions] = useState<ChatSession[]>(sampleSessions);
 

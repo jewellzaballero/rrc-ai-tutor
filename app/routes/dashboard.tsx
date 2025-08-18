@@ -1,8 +1,7 @@
-import type { Route } from "./+types/dashboard";
-import { Link, Form } from "react-router";
+import { Link } from "react-router";
 import { SideNavigation } from "../components/SideNavigation";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Dashboard - RRC AI Tutor" },
     { name: "description", content: "Your personalized RRC AI Tutor dashboard" },
