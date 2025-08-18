@@ -1,32 +1,17 @@
-import type { Route } from "./+types/course-setup";
-import { Link, Form, useSearchParams } from "react-router";
+import { Link, useSearchParams, useNavigate } from "react-router";
 import { useState } from "react";
 import { SideNavigation } from "../components/SideNavigation";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Course Setup - RRC AI Tutor" },
     { name: "description", content: "Configure your learning project preferences" },
   ];
 }
 
-export async function action({ request }: Route.ActionArgs) {
-  const formData = await request.formData();
-  
-  // Here you would process the form data and create the project
-  console.log("Project setup data:", Object.fromEntries(formData));
-  
-  // Redirect to chat page to start learning with the AI tutor
-  return new Response(null, {
-    status: 302,
-    headers: {
-      Location: "/chat"
-    }
-  });
-}
-
 export default function CourseSetup() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const courseCode = searchParams.get("course") || "Selected Course";
   const courseName = searchParams.get("courseName") || "";
   
@@ -34,6 +19,17 @@ export default function CourseSetup() {
   const [learningStyles, setLearningStyles] = useState<string[]>([]);
   const [improvementAreas, setImprovementAreas] = useState<string[]>([]);
   const [formats, setFormats] = useState<string[]>([]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    // Here you would process the form data and create the project
+    console.log("Project setup data:", Object.fromEntries(formData));
+    
+    // Navigate to chat page to start learning with the AI tutor
+    navigate("/chat");
+  };
 
   const handleCheckboxChange = (
     value: string,
@@ -80,7 +76,7 @@ export default function CourseSetup() {
 
         {/* Page Content */}
         <main className="p-6 overflow-y-auto flex-1">
-          <Form method="post" className="max-w-4xl mx-auto space-y-8">
+          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto space-y-8">
             {/* Hidden course information */}
             <input type="hidden" name="courseCode" value={courseCode} />
             <input type="hidden" name="courseName" value={courseName} />
@@ -292,7 +288,7 @@ export default function CourseSetup() {
                 </svg>
               </button>
             </div>
-          </Form>
+          </form>
         </main>
       </div>
     </div>

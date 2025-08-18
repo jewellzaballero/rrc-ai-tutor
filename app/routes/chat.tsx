@@ -1,9 +1,8 @@
-import type { Route } from "./+types/chat";
-import { Link, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import { useState } from "react";
 import { SideNavigation } from "../components/SideNavigation";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "AI Chat - RRC AI Tutor" },
     { name: "description", content: "Chat with your AI tutor for personalized help" },
