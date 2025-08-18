@@ -5,7 +5,7 @@ import { SideNavigation } from "../components/SideNavigation";
 export function meta() {
   return [
     { title: "Course Selection - RRC AI Tutor" },
-    { name: "description", content: "Select a course to create a new project" },
+    { name: "description", content: "Select a course to create a new course" },
   ];
 }
 
@@ -54,18 +54,18 @@ export default function CourseSelection() {
               <div>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Course Selection</h1>
                 <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  Choose a course to create your new project
+                  Choose a course to create your new course
                 </p>
               </div>
               <Link
-                to="/projects"
+                to="/courses"
                 className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M19 12H5" />
                   <path d="M12 19l-7-7 7-7" />
                 </svg>
-                Back to Projects
+                Back to Courses
               </Link>
             </div>
           </div>
@@ -202,7 +202,7 @@ export default function CourseSelection() {
                     to={`/course-setup?course=${encodeURIComponent(course.code)}&courseName=${encodeURIComponent(course.name)}`}
                     className="block w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors text-center"
                   >
-                    Create Project
+                    Create Course
                   </Link>
                 </div>
               </div>

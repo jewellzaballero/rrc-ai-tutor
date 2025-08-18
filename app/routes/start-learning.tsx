@@ -124,7 +124,7 @@ export default function StartLearning() {
                 </Link>
               </div>
 
-              {/* Browse Projects */}
+              {/* Browse Courses */}
               <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-8 hover:shadow-xl transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-6">
                   <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -142,18 +142,18 @@ export default function StartLearning() {
                 </div>
 
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                  Browse Projects
+                  Browse Courses
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  Explore your learning projects, track progress, or create a new project
+                  Explore your learning courses, track progress, or create a new course
                 </p>
 
-                {/* Project Stats */}
+                {/* Course Stats */}
                 <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center">
                       <p className="text-2xl font-bold text-gray-900 dark:text-white">3</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Active Projects</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">Active Courses</p>
                     </div>
                     <div className="text-center">
                       <p className="text-2xl font-bold text-gray-900 dark:text-white">75%</p>
@@ -163,14 +163,14 @@ export default function StartLearning() {
                 </div>
 
                 <Link
-                  to="/projects"
+                  to="/courses"
                   className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-6 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 group"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 transition-transform">
                     <path d="M5 12h14" />
                     <path d="M12 5l7 7-7 7" />
                   </svg>
-                  View Projects
+                  View Courses
                 </Link>
               </div>
             </div>
@@ -199,7 +199,7 @@ export default function StartLearning() {
                     <line x1="12" y1="8" x2="12" y2="16" />
                     <line x1="8" y1="12" x2="16" y2="12" />
                   </svg>
-                  Create New Project
+                  Create New Course
                 </Link>
               </div>
             </div>
