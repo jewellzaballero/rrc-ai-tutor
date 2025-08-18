@@ -176,7 +176,7 @@ export default function Dashboard() {
               </div>
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Browse Courses</span>
             </Link>
-            <Link to="/projects" className="p-4 text-center hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <Link to="/courses" className="p-4 text-center hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
               <div className="w-8 h-8 bg-orange-100 dark:bg-orange-900 rounded-lg mx-auto mb-2 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-orange-600 dark:text-orange-400">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -186,7 +186,7 @@ export default function Dashboard() {
                   <polyline points="10,9 9,9 8,9" />
                 </svg>
               </div>
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">My Projects</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">My Courses</span>
             </Link>
             <Link to="/chat" className="p-4 text-center hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
               <div className="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-lg mx-auto mb-2 flex items-center justify-center">

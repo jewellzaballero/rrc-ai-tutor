@@ -5,7 +5,7 @@ import { SideNavigation } from "../components/SideNavigation";
 export function meta() {
   return [
     { title: "Course Setup - RRC AI Tutor" },
-    { name: "description", content: "Configure your learning project preferences" },
+    { name: "description", content: "Configure your learning course preferences" },
   ];
 }
 
@@ -24,8 +24,8 @@ export default function CourseSetup() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     
-    // Here you would process the form data and create the project
-    console.log("Project setup data:", Object.fromEntries(formData));
+    // Here you would process the form data and create the course
+    console.log("Course setup data:", Object.fromEntries(formData));
     
     // Navigate to chat page to start learning with the AI tutor
     navigate("/chat");
@@ -54,7 +54,7 @@ export default function CourseSetup() {
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Project Setup</h1>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Course Setup</h1>
                 <p className="text-gray-600 dark:text-gray-400 mt-1">
                   Configure your learning preferences for <span className="font-medium">{courseCode}</span>
                   {courseName && <span className="text-gray-500 dark:text-gray-500"> - {courseName}</span>}
@@ -281,7 +281,7 @@ export default function CourseSetup() {
                 type="submit"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
               >
-                Create Project
+                Create Course
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14" />
                   <path d="M12 5l7 7-7 7" />
