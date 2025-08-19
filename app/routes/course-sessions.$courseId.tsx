@@ -59,23 +59,6 @@ export default function CourseSessions() {
           </svg>
         </Link>
       </Header>
-      
-      {/* Action Bar */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-3">
-        <div className="flex justify-end">
-          <Link
-            to={`/chat?sessionId=new&course=${encodeURIComponent(courseTitle)}`}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="16" />
-              <line x1="8" y1="12" x2="16" y2="12" />
-            </svg>
-            New Chat Session
-          </Link>
-        </div>
-      </div>
 
       {/* Main Content */}
       <main className="p-6 overflow-y-auto flex-1">
@@ -137,6 +120,21 @@ export default function CourseSessions() {
                 </div>
               </div>
             </div>
+          </div>
+          
+          {/* New Chat Session Button */}
+          <div className="mb-6">
+            <Link
+              to={`/chat?sessionId=new&course=${encodeURIComponent(courseTitle)}`}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2 w-fit"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="16" />
+                <line x1="8" y1="12" x2="16" y2="12" />
+              </svg>
+              New Chat Session
+            </Link>
           </div>
 
           {/* Favourites Section */}
