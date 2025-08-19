@@ -17,10 +17,10 @@ export default function SignIn() {
     const password = formData.get("password");
 
     // Here you would typically validate credentials
-    // For now, we'll just redirect to dashboard page
+    // For now, we'll just redirect to courses page
     console.log("Login attempt:", { studentNumber, password });
     
-    navigate("/dashboard");
+    navigate("/courses");
   };
 
   return (

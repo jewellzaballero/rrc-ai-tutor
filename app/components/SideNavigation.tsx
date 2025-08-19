@@ -8,8 +8,8 @@ export function SideNavigation({ className }: SideNavigationProps) {
   const location = useLocation();
   
   const isActive = (path: string) => {
-    if (path === "/dashboard") {
-      return location.pathname === "/dashboard";
+    if (path === "/courses") {
+      return location.pathname === "/courses";
     }
     return location.pathname.startsWith(path);
   };
@@ -24,26 +24,14 @@ export function SideNavigation({ className }: SideNavigationProps) {
   return (
     <aside className={`fixed left-0 top-0 w-64 h-screen bg-white dark:bg-gray-800 shadow-sm border-r border-gray-200 dark:border-gray-700 flex flex-col z-40 ${className || ""}`}>
       <div className="p-6">
-        <Link to="/dashboard" className="text-xl font-semibold text-gray-900 dark:text-white">
+        <Link to="/courses" className="text-xl font-semibold text-gray-900 dark:text-white">
           RRC AI Tutor
         </Link>
       </div>
       
       <nav className="px-4 flex-1">
         <ul className="space-y-2">
-          <li>
-            <Link
-              to="/dashboard"
-              className={getNavLinkClassName("/dashboard")}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <polyline points="9,22 9,12 15,12 15,22" />
-              </svg>
-              Dashboard
-            </Link>
-          </li>
-          
+
           <li>
             <Link
               to="/courses"
