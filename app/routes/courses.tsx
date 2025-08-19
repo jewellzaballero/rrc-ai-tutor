@@ -5,12 +5,11 @@ interface Course {
   id: number;
   title: string;
   description: string;
-  status: string;
   statusColor: string;
   progress: number;
   dueDate: string;
-  tasksCompleted: number;
-  totalTasks: number;
+  modulesCompleted: number;
+  totalModules: number;
   hasSessionHistory: boolean;
   iconBg: string;
   icon: React.ReactNode;
@@ -45,9 +44,6 @@ export default function Courses() {
                   <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${course.iconBg}`}>
                     {course.icon}
                   </div>
-                  <span className={`px-3 py-1 text-xs font-medium rounded-full ${course.statusColor}`}>
-                    {course.status}
-                  </span>
                 </div>
                 
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -73,7 +69,7 @@ export default function Courses() {
                   
                   <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                     <span>Due: {course.dueDate}</span>
-                    <span>{course.tasksCompleted}/{course.totalTasks} tasks</span>
+                    <span>{course.modulesCompleted}/{course.totalModules} modules</span>
                   </div>
                 </div>
 
@@ -116,12 +112,11 @@ const sampleCourses: Course[] = [
     id: 1,
     title: "Mathematics Fundamentals",
     description: "Complete algebra and calculus modules with AI assistance",
-    status: "In Progress",
     statusColor: "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400",
     progress: 75,
     dueDate: "Jan 30, 2024",
-    tasksCompleted: 8,
-    totalTasks: 12,
+    modulesCompleted: 8,
+    totalModules: 12,
     hasSessionHistory: true,
     iconBg: "bg-blue-100 dark:bg-blue-900",
     icon: (
@@ -136,12 +131,11 @@ const sampleCourses: Course[] = [
     id: 2,
     title: "Computer Science Project",
     description: "Build a web application using modern frameworks",
-    status: "Planning",
     statusColor: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400",
     progress: 25,
     dueDate: "Feb 15, 2024",
-    tasksCompleted: 3,
-    totalTasks: 15,
+    modulesCompleted: 3,
+    totalModules: 15,
     hasSessionHistory: false,
     iconBg: "bg-green-100 dark:bg-green-900",
     icon: (
@@ -155,12 +149,11 @@ const sampleCourses: Course[] = [
     id: 3,
     title: "Research Paper",
     description: "AI in Education: Current trends and future possibilities",
-    status: "Review",
     statusColor: "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400",
     progress: 90,
     dueDate: "Jan 20, 2024",
-    tasksCompleted: 9,
-    totalTasks: 10,
+    modulesCompleted: 9,
+    totalModules: 10,
     hasSessionHistory: true,
     iconBg: "bg-purple-100 dark:bg-purple-900",
     icon: (
@@ -172,25 +165,5 @@ const sampleCourses: Course[] = [
         <polyline points="10 9 9 9 8 9" />
       </svg>
     ),
-  },
-  {
-    id: 4,
-    title: "Introduction to Psychology",
-    description: "Explore fundamental concepts in human behavior and mental processes",
-    status: "Not Started",
-    statusColor: "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400",
-    progress: 0,
-    dueDate: "Mar 1, 2024",
-    tasksCompleted: 0,
-    totalTasks: 10,
-    hasSessionHistory: false,
-    iconBg: "bg-red-100 dark:bg-red-900",
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-600 dark:text-red-400">
-        <path d="M9 12l2 2 4-4" />
-        <path d="M21 12c.552 0 1-.448 1-1V9c0-.552-.448-1-1-1h-1V6a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2H2c-.552 0-1 .448-1 1v2c0 .552.448 1 1 1h1v2a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-2h1z" />
-        <circle cx="12" cy="8" r="3" />
-      </svg>
-    ),
-  },
+  }
 ];
