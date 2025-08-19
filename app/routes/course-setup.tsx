@@ -1,6 +1,6 @@
 import { Link, useSearchParams, useNavigate } from "react-router";
 import { useState } from "react";
-import { SideNavigation } from "../components/SideNavigation";
+import { Header } from "../components/Header";
 
 export function meta() {
   return [
@@ -14,6 +14,7 @@ export default function CourseSetup() {
   const navigate = useNavigate();
   const courseCode = searchParams.get("course") || "Selected Course";
   const courseName = searchParams.get("courseName") || "";
+  const courseId = searchParams.get("courseId");
   
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [learningStyles, setLearningStyles] = useState<string[]>([]);
@@ -27,8 +28,13 @@ export default function CourseSetup() {
     // Here you would process the form data and create the course
     console.log("Course setup data:", Object.fromEntries(formData));
     
-    // Navigate to chat page to start learning with the AI tutor
-    navigate("/chat");
+    // Navigate to course sessions page after setup completion
+    if (courseId) {
+      navigate(`/course-sessions/${courseId}?title=${encodeURIComponent(courseCode)}`);
+    } else {
+      // Fallback to chat if no courseId provided
+      navigate("/chat");
+    }
   };
 
   const handleCheckboxChange = (
@@ -45,41 +51,33 @@ export default function CourseSetup() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <SideNavigation />
+      <Header 
+        title="Course Setup"
+        subtitle={
+          <>
+            Configure your learning preferences for <span className="font-medium">{courseCode}</span>
+            {courseName && <span className="text-gray-500 dark:text-gray-500"> - {courseName}</span>}
+          </>
+        }
+      >
+        <Link
+          to="/courses"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5" />
+            <path d="M12 19l-7-7 7-7" />
+          </svg>
+        </Link>
+      </Header>
 
       {/* Main Content */}
-      <div className="ml-64">
-        {/* Header */}
-        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Course Setup</h1>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  Configure your learning preferences for <span className="font-medium">{courseCode}</span>
-                  {courseName && <span className="text-gray-500 dark:text-gray-500"> - {courseName}</span>}
-                </p>
-              </div>
-              <Link
-                to="/course-selection"
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M19 12H5" />
-                  <path d="M12 19l-7-7 7-7" />
-                </svg>
-                Back to Course Selection
-              </Link>
-            </div>
-          </div>
-        </header>
-
-        {/* Page Content */}
-        <main className="p-6 overflow-y-auto flex-1">
+      <main className="p-6 overflow-y-auto flex-1">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto space-y-8">
             {/* Hidden course information */}
             <input type="hidden" name="courseCode" value={courseCode} />
             <input type="hidden" name="courseName" value={courseName} />
+            {courseId && <input type="hidden" name="courseId" value={courseId} />}
             {/* Course Materials Upload */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-3">
@@ -268,20 +266,20 @@ export default function CourseSetup() {
             {/* Action Buttons */}
             <div className="flex items-center justify-between pt-6 border-t border-gray-200 dark:border-gray-700">
               <Link
-                to="/course-selection"
+                to="/courses"
                 className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M19 12H5" />
                   <path d="M12 19l-7-7 7-7" />
                 </svg>
-                Back to Course Selection
+                Back to Courses
               </Link>
               <button
                 type="submit"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
               >
-                Create Course
+                Complete Setup
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14" />
                   <path d="M12 5l7 7-7 7" />
@@ -290,7 +288,6 @@ export default function CourseSetup() {
             </div>
           </form>
         </main>
-      </div>
     </div>
   );
 }
