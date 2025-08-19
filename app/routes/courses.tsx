@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { SideNavigation } from "../components/SideNavigation";
+import { Header } from "../components/Header";
 
 interface Course {
   id: number;
@@ -26,22 +26,13 @@ export function meta() {
 export default function Courses() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <SideNavigation />
+      <Header 
+        title="Courses"
+        subtitle="Manage your learning courses and assignments"
+      />
 
       {/* Main Content */}
-      <div className="ml-64">
-        {/* Header */}
-        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-          <div className="px-6 py-4">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Courses</h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
-              Manage your learning courses and assignments
-            </p>
-          </div>
-        </header>
-
-        {/* Page Content */}
-        <main className="p-6 overflow-y-auto flex-1">
+      <main className="p-6 overflow-y-auto flex-1">
           {/* Create New Course Button */}
           <div className="mb-8">
             <Link 
@@ -140,7 +131,6 @@ export default function Courses() {
             </div>
           )}
         </main>
-      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router";
 import { useState } from "react";
-import { SideNavigation } from "../components/SideNavigation";
+import { Header } from "../components/Header";
 
 export function meta() {
   return [
@@ -42,30 +42,23 @@ export default function Chat() {
 function SessionSelector({ onSelectSession }: { onSelectSession: (sessionId: string) => void }) {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <SideNavigation />
+      <Header 
+        title="AI Tutor Chat"
+        subtitle="Continue a recent session or start fresh"
+      />
+      
+      {/* Status Indicator */}
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+        <div className="flex justify-end">
+          <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 rounded-full text-sm font-medium">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            AI Tutor Online
+          </div>
+        </div>
+      </div>
 
       {/* Main Content */}
-      <div className="ml-64">
-        {/* Header */}
-        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">AI Tutor Chat</h1>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  Continue a recent session or start fresh
-                </p>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 rounded-full text-sm font-medium">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                AI Tutor Online
-              </div>
-            </div>
-          </div>
-        </header>
-
-        {/* Page Content */}
-        <main className="p-6 overflow-y-auto flex-1">
+      <main className="p-6 overflow-y-auto flex-1">
           <div className="max-w-4xl mx-auto">
             {/* New Chat Option */}
             <div className="mb-8">
@@ -171,7 +164,6 @@ function SessionSelector({ onSelectSession }: { onSelectSession: (sessionId: str
             </div>
           </div>
         </main>
-      </div>
     </div>
   );
 }
@@ -181,44 +173,36 @@ function ChatInterface({ sessionId, courseName, onBackToSessions }: { sessionId:
   const currentSession = sessionId === 'new' ? null : recentSessions.find(s => s.id === sessionId);
   
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <SideNavigation />
-
-      {/* Main Content */}
-      <div className="ml-64 h-screen flex flex-col">
-        {/* Header */}
-        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <button
-                onClick={onBackToSessions}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M19 12H5" />
-                  <path d="M12 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {currentSession ? currentSession.title : courseName ? `New ${courseName} Chat Session` : "New AI Chat Session"}
-                </h1>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  {currentSession 
-                    ? currentSession.course 
-                    : courseName 
-                      ? `Start a fresh conversation about ${courseName} with your AI tutor`
-                      : "Start a fresh conversation with your AI tutor"
-                  }
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 rounded-full text-sm font-medium">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              AI Tutor Online
-            </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 h-screen flex flex-col">
+      <Header 
+        title={currentSession ? currentSession.title : courseName ? `New ${courseName} Chat Session` : "New AI Chat Session"}
+        subtitle={currentSession 
+          ? currentSession.course 
+          : courseName 
+            ? `Start a fresh conversation about ${courseName} with your AI tutor`
+            : "Start a fresh conversation with your AI tutor"
+        }
+      >
+        <button
+          onClick={onBackToSessions}
+          className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5" />
+            <path d="M12 19l-7-7 7-7" />
+          </svg>
+        </button>
+      </Header>
+      
+      {/* Status Indicator */}
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
+        <div className="flex justify-end">
+          <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 rounded-full text-sm font-medium">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            AI Tutor Online
           </div>
-        </header>
+        </div>
+      </div>
 
         {/* Chat Messages */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -354,7 +338,6 @@ function ChatInterface({ sessionId, courseName, onBackToSessions }: { sessionId:
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 }

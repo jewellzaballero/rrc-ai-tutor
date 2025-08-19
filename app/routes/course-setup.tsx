@@ -1,6 +1,6 @@
 import { Link, useSearchParams, useNavigate } from "react-router";
 import { useState } from "react";
-import { SideNavigation } from "../components/SideNavigation";
+import { Header } from "../components/Header";
 
 export function meta() {
   return [
@@ -51,37 +51,29 @@ export default function CourseSetup() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <SideNavigation />
+      <Header 
+        title="Course Setup"
+        subtitle={
+          <>
+            Configure your learning preferences for <span className="font-medium">{courseCode}</span>
+            {courseName && <span className="text-gray-500 dark:text-gray-500"> - {courseName}</span>}
+          </>
+        }
+      >
+        <Link
+          to="/course-selection"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5" />
+            <path d="M12 19l-7-7 7-7" />
+          </svg>
+          Back to Course Selection
+        </Link>
+      </Header>
 
       {/* Main Content */}
-      <div className="ml-64">
-        {/* Header */}
-        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Course Setup</h1>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  Configure your learning preferences for <span className="font-medium">{courseCode}</span>
-                  {courseName && <span className="text-gray-500 dark:text-gray-500"> - {courseName}</span>}
-                </p>
-              </div>
-              <Link
-                to="/course-selection"
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M19 12H5" />
-                  <path d="M12 19l-7-7 7-7" />
-                </svg>
-                Back to Course Selection
-              </Link>
-            </div>
-          </div>
-        </header>
-
-        {/* Page Content */}
-        <main className="p-6 overflow-y-auto flex-1">
+      <main className="p-6 overflow-y-auto flex-1">
           <form onSubmit={handleSubmit} className="max-w-4xl mx-auto space-y-8">
             {/* Hidden course information */}
             <input type="hidden" name="courseCode" value={courseCode} />
@@ -297,7 +289,6 @@ export default function CourseSetup() {
             </div>
           </form>
         </main>
-      </div>
     </div>
   );
 }

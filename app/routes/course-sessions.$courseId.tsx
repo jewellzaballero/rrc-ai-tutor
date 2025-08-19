@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router";
 import { useState } from "react";
-import { SideNavigation } from "../components/SideNavigation";
+import { Header } from "../components/Header";
 
 export function meta() {
   return [
@@ -45,50 +45,40 @@ export default function CourseSessions() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <SideNavigation />
+      <Header 
+        title={`${courseTitle} Sessions`}
+        subtitle="Your AI chat sessions and study history for this course"
+      >
+        <Link
+          to="/courses"
+          className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5" />
+            <path d="M12 19l-7-7 7-7" />
+          </svg>
+        </Link>
+      </Header>
+      
+      {/* Action Bar */}
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-3">
+        <div className="flex justify-end">
+          <Link
+            to={`/chat?sessionId=new&course=${encodeURIComponent(courseTitle)}`}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="16" />
+              <line x1="8" y1="12" x2="16" y2="12" />
+            </svg>
+            New Chat Session
+          </Link>
+        </div>
+      </div>
 
       {/* Main Content */}
-      <div className="ml-64">
-        {/* Header */}
-        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-3 mb-1">
-                  <Link
-                    to="/courses"
-                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M19 12H5" />
-                      <path d="M12 19l-7-7 7-7" />
-                    </svg>
-                  </Link>
-                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {courseTitle} Sessions
-                  </h1>
-                </div>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Your AI chat sessions and study history for this course
-                </p>
-              </div>
-              <Link
-                to={`/chat?sessionId=new&course=${encodeURIComponent(courseTitle)}`}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="16" />
-                  <line x1="8" y1="12" x2="16" y2="12" />
-                </svg>
-                New Chat Session
-              </Link>
-            </div>
-          </div>
-        </header>
-
-        {/* Page Content */}
-        <main className="p-6 overflow-y-auto flex-1">
+      <main className="p-6 overflow-y-auto flex-1">
           {/* Course Overview Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
@@ -214,7 +204,6 @@ export default function CourseSessions() {
             </div>
           )}
         </main>
-      </div>
     </div>
   );
 }

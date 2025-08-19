@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { useState } from "react";
-import { SideNavigation } from "../components/SideNavigation";
+import { Header } from "../components/Header";
 
 export function meta() {
   return [
@@ -43,36 +43,24 @@ export default function CourseSelection() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <SideNavigation />
+      <Header 
+        title="Course Selection"
+        subtitle="Choose a course to create your new course"
+      >
+        <Link
+          to="/courses"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5" />
+            <path d="M12 19l-7-7 7-7" />
+          </svg>
+          Back to Courses
+        </Link>
+      </Header>
 
       {/* Main Content */}
-      <div className="ml-64">
-        {/* Header */}
-        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
-          <div className="px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Course Selection</h1>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  Choose a course to create your new course
-                </p>
-              </div>
-              <Link
-                to="/courses"
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M19 12H5" />
-                  <path d="M12 19l-7-7 7-7" />
-                </svg>
-                Back to Courses
-              </Link>
-            </div>
-          </div>
-        </header>
-
-        {/* Page Content */}
-        <main className="p-6 overflow-y-auto flex-1">
+      <main className="p-6 overflow-y-auto flex-1">
           {/* Search and Filters */}
           <div className="mb-8 space-y-4">
             <div className="flex flex-col md:flex-row gap-4">
@@ -236,7 +224,6 @@ export default function CourseSelection() {
             </div>
           )}
         </main>
-      </div>
     </div>
   );
 }
