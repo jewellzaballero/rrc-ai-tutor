@@ -14,6 +14,7 @@ export default function CourseSetup() {
   const navigate = useNavigate();
   const courseCode = searchParams.get("course") || "Selected Course";
   const courseName = searchParams.get("courseName") || "";
+  const courseId = searchParams.get("courseId");
   
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
   const [learningStyles, setLearningStyles] = useState<string[]>([]);
@@ -27,8 +28,13 @@ export default function CourseSetup() {
     // Here you would process the form data and create the course
     console.log("Course setup data:", Object.fromEntries(formData));
     
-    // Navigate to chat page to start learning with the AI tutor
-    navigate("/chat");
+    // Navigate to course sessions page after setup completion
+    if (courseId) {
+      navigate(`/course-sessions/${courseId}?title=${encodeURIComponent(courseCode)}`);
+    } else {
+      // Fallback to chat if no courseId provided
+      navigate("/chat");
+    }
   };
 
   const handleCheckboxChange = (
@@ -80,6 +86,7 @@ export default function CourseSetup() {
             {/* Hidden course information */}
             <input type="hidden" name="courseCode" value={courseCode} />
             <input type="hidden" name="courseName" value={courseName} />
+            {courseId && <input type="hidden" name="courseId" value={courseId} />}
             {/* Course Materials Upload */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-3">
