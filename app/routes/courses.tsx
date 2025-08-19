@@ -91,7 +91,7 @@ export default function Courses() {
                     to={`/course-sessions/${course.id}?title=${encodeURIComponent(course.title)}`}
                     className="w-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 py-2 px-4 rounded-lg text-sm font-medium transition-colors block text-center"
                   >
-                    View Courses
+                    View Course
                   </Link>
                 </div>
               </div>
