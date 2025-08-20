@@ -200,8 +200,7 @@ export default function CourseSessions() {
                   </svg>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">AI Chat Sessions</h2>
                 </div>
-                <Link
-                  to={`/chat?sessionId=new&course=${encodeURIComponent(courseTitle)}&courseId=${courseId}`}
+                <div
                   className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -209,8 +208,8 @@ export default function CourseSessions() {
                     <line x1="12" y1="8" x2="12" y2="16" />
                     <line x1="8" y1="12" x2="16" y2="12" />
                   </svg>
-                  New Session
-                </Link>
+                  New Chat
+                </div>
               </div>
 
               {/* Favourite Sessions */}
@@ -299,14 +298,17 @@ export default function CourseSessions() {
                   </svg>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">Practice Quizzes</h2>
                 </div>
-                <button className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                <Link 
+                  to={`/chat?sessionId=new&course=${encodeURIComponent(courseTitle)}&courseId=${courseId}`}
+                  className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10" />
                     <line x1="12" y1="8" x2="12" y2="16" />
                     <line x1="8" y1="12" x2="16" y2="12" />
                   </svg>
                   New Quiz
-                </button>
+                </Link>
               </div>
 
               {/* Favourite Quizzes */}
