@@ -6,5 +6,6 @@ export default [
   route("/courses", "routes/courses.tsx"),
   route("/course-sessions/:courseId", "routes/course-sessions.$courseId.tsx"),
   route("/chat", "routes/chat.tsx"),
+  route("/quiz", "routes/quiz.tsx"),
   route("/course-setup", "routes/course-setup.tsx")
 ] satisfies RouteConfig;
