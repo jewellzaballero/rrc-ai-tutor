@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router";
+import { useSearchParams, Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { Header } from "../components/Header";
 
@@ -20,156 +20,31 @@ interface ChatSession {
 }
 
 export default function Chat() {
+  const navigate = useNavigate();
+  
   const [searchParams] = useSearchParams();
   const sessionIdParam = searchParams.get("sessionId");
   const courseParam = searchParams.get("course");
+  const courseIdParam = searchParams.get("courseId");
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(sessionIdParam);
 
   // If no session is selected, show the session selector
   if (!currentSessionId) {
-    return <SessionSelector onSelectSession={setCurrentSessionId} />;
+    navigate("/courses");
+    return null;
   }
 
   // Show the chat interface for the selected session
   return <ChatInterface 
     sessionId={currentSessionId} 
-    courseName={courseParam} 
+    courseName={courseParam}
+    courseId={courseIdParam}
     onBackToSessions={() => setCurrentSessionId(null)} 
   />;
 }
 
-// Session Selector Component
-function SessionSelector({ onSelectSession }: { onSelectSession: (sessionId: string) => void }) {
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Header 
-        title="AI Tutor Chat"
-        subtitle="Continue a recent session or start fresh"
-      />
-      
-      {/* Status Indicator */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
-        <div className="flex justify-end">
-          <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 rounded-full text-sm font-medium">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            AI Tutor Online
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <main className="p-6 overflow-y-auto flex-1">
-          <div className="max-w-4xl mx-auto">
-            {/* New Chat Option */}
-            <div className="mb-8">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-2xl border border-blue-200 dark:border-blue-700 p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="16" />
-                        <line x1="8" y1="12" x2="16" y2="12" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Start New Chat Session</h2>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Begin fresh with the AI tutor</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => onSelectSession('new')}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    Start New Chat
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Recent Sessions */}
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-600 dark:text-gray-400">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12,6 12,12 16,14" />
-                </svg>
-                Recent Sessions
-              </h2>
-              
-              <div className="space-y-4">
-                {recentSessions.map((session) => (
-                  <div
-                    key={session.id}
-                    onClick={() => onSelectSession(session.id)}
-                    className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600 transition-all cursor-pointer group"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-semibold text-gray-900 dark:text-white">
-                            {session.title}
-                          </h3>
-                          <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 rounded-full">
-                            {session.course}
-                          </span>
-                        </div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
-                          {session.preview}
-                        </p>
-                        <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
-                          <span className="flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <circle cx="12" cy="12" r="10" />
-                              <polyline points="12,6 12,12 16,14" />
-                            </svg>
-                            {session.timestamp}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                            </svg>
-                            {session.messageCount} messages
-                          </span>
-                          <span>Last active: {session.lastActivity}</span>
-                        </div>
-                      </div>
-                      <div className="ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600 dark:text-blue-400">
-                          <path d="M5 12h14" />
-                          <path d="M12 5l7 7-7 7" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Empty State */}
-              {recentSessions.length === 0 && (
-                <div className="text-center py-12">
-                  <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400">
-                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    No recent sessions
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    Start your first AI tutoring conversation
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </main>
-    </div>
-  );
-}
-
 // Chat Interface Component
-function ChatInterface({ sessionId, courseName, onBackToSessions }: { sessionId: string; courseName?: string | null; onBackToSessions: () => void }) {
+function ChatInterface({ sessionId, courseName, courseId, onBackToSessions }: { sessionId: string; courseName?: string | null; courseId?: string | null; onBackToSessions: () => void }) {
   const currentSession = sessionId === 'new' ? null : recentSessions.find(s => s.id === sessionId);
   
   return (
@@ -183,15 +58,27 @@ function ChatInterface({ sessionId, courseName, onBackToSessions }: { sessionId:
             : "Start a fresh conversation with your AI tutor"
         }
       >
-        <button
-          onClick={onBackToSessions}
-          className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 12H5" />
-            <path d="M12 19l-7-7 7-7" />
-          </svg>
-        </button>
+        {courseId ? (
+          <Link
+            to={`/course-sessions/${courseId}`}
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5" />
+              <path d="M12 19l-7-7 7-7" />
+            </svg>
+          </Link>
+        ) : (
+          <button
+            onClick={onBackToSessions}
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5" />
+              <path d="M12 19l-7-7 7-7" />
+            </svg>
+          </button>
+        )}
       </Header>
       
       {/* Status Indicator */}
