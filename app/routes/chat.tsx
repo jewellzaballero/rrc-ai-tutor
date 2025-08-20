@@ -34,9 +34,10 @@ export default function Chat() {
   const sessionIdParam = searchParams.get("sessionId");
   const courseParam = searchParams.get("course");
   const courseIdParam = searchParams.get("courseId");
+  const typeParam = searchParams.get("type");
   
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(sessionIdParam);
-  const [showNewQuizForm, setShowNewQuizForm] = useState(sessionIdParam === 'new');
+  const [showNewQuizForm, setShowNewQuizForm] = useState(sessionIdParam === 'new' && typeParam === 'quiz');
   const [quizFormData, setQuizFormData] = useState<QuizFormData | null>(null);
 
   // If no session is selected, navigate to courses
@@ -362,16 +363,6 @@ function ChatInterface({ sessionId, courseName, courseId, quizData, onBackToSess
           </button>
         )}
       </Header>
-      
-      {/* Status Indicator */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-2">
-        <div className="flex justify-end">
-          <div className="flex items-center gap-2 px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 rounded-full text-sm font-medium">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            AI Tutor Online
-          </div>
-        </div>
-      </div>
 
         {/* Chat Messages */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">

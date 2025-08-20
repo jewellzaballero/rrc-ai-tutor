@@ -200,7 +200,8 @@ export default function CourseSessions() {
                   </svg>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">AI Chat Sessions</h2>
                 </div>
-                <div
+                <Link
+                  to={`/chat?sessionId=new&type=chat&course=${encodeURIComponent(courseTitle)}&courseId=${courseId}`}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -209,7 +210,7 @@ export default function CourseSessions() {
                     <line x1="8" y1="12" x2="16" y2="12" />
                   </svg>
                   New Chat
-                </div>
+                </Link>
               </div>
 
               {/* Favourite Sessions */}
@@ -279,7 +280,7 @@ export default function CourseSessions() {
                     Start your first AI tutoring session
                   </p>
                   <Link 
-                    to={`/chat?sessionId=new&course=${encodeURIComponent(courseTitle)}&courseId=${courseId}`}
+                    to={`/chat?sessionId=new&type=chat&course=${encodeURIComponent(courseTitle)}&courseId=${courseId}`}
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-block"
                   >
                     Start First Session
@@ -299,7 +300,7 @@ export default function CourseSessions() {
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">Practice Quizzes</h2>
                 </div>
                 <Link 
-                  to={`/chat?sessionId=new&course=${encodeURIComponent(courseTitle)}&courseId=${courseId}`}
+                  to={`/chat?sessionId=new&type=quiz&course=${encodeURIComponent(courseTitle)}&courseId=${courseId}`}
                   className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
