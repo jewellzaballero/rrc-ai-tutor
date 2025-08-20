@@ -1,6 +1,7 @@
-import { Link, useParams } from "react-router";
+import { Link, useParams, useSearchParams } from "react-router";
 import { useState } from "react";
 import { Header } from "../components/Header";
+import { getCourseById } from "../data/courses";
 
 export function meta() {
   return [
@@ -17,14 +18,17 @@ interface ChatSession {
   duration: string;
   isFavourite: boolean;
   messageCount: number;
-  topic: string;
   lastActivity: string;
 }
 
 export default function CourseSessions() {
   const params = useParams();
   const courseId = params.courseId;
-  const courseTitle = "Course";
+  
+  // Get course information from the courseId
+  const course = courseId ? getCourseById(courseId) : null;
+  const courseTitle = course?.title || "Course";
+  const courseCode = course?.courseCode || "";
   
   const [sessions, setSessions] = useState<ChatSession[]>(sampleSessions);
 
@@ -46,7 +50,7 @@ export default function CourseSessions() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Header 
-        title={`${courseTitle} Sessions`}
+        title="Course Sessions"
         subtitle="Your AI chat sessions and study history for this course"
       >
         <Link
@@ -62,6 +66,35 @@ export default function CourseSessions() {
 
       {/* Main Content */}
       <main className="p-6 overflow-y-auto flex-1">
+          {/* Course Information */}
+          {course && (
+            <div className="mb-6">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                <div className="flex items-center gap-4">
+                  <div className={`w-16 h-16 rounded-lg flex items-center justify-center ${course.iconBg}`}>
+                    {course.icon}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 rounded-full">
+                        {courseCode}
+                      </span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        {course.instructor}
+                      </span>
+                    </div>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                      {courseTitle}
+                    </h1>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">
+                      {course.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Course Overview Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
@@ -226,9 +259,6 @@ function SessionCard({ session, onToggleFavourite, isCompact = false }: SessionC
             <h3 className="font-semibold text-gray-900 dark:text-white truncate">
               {session.title}
             </h3>
-            <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 rounded-full whitespace-nowrap">
-              {session.topic}
-            </span>
           </div>
           <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
             {session.preview}
@@ -278,7 +308,6 @@ const sampleSessions: ChatSession[] = [
     duration: "45 min",
     isFavourite: true,
     messageCount: 23,
-    topic: "Mathematics",
     lastActivity: "Jan 15, 2024"
   },
   {
@@ -289,7 +318,6 @@ const sampleSessions: ChatSession[] = [
     duration: "32 min", 
     isFavourite: true,
     messageCount: 18,
-    topic: "Mathematics",
     lastActivity: "Jan 12, 2024"
   },
   {
@@ -300,7 +328,6 @@ const sampleSessions: ChatSession[] = [
     duration: "28 min",
     isFavourite: false,
     messageCount: 15,
-    topic: "Mathematics",
     lastActivity: "Jan 10, 2024"
   },
   {
@@ -311,7 +338,6 @@ const sampleSessions: ChatSession[] = [
     duration: "38 min",
     isFavourite: false,
     messageCount: 21,
-    topic: "Mathematics",
     lastActivity: "Jan 9, 2024"
   },
   {
@@ -321,8 +347,7 @@ const sampleSessions: ChatSession[] = [
     timestamp: "2 weeks ago",
     duration: "25 min",
     isFavourite: false,
-    messageCount: 12,
-    topic: "Mathematics", 
+    messageCount: 12, 
     lastActivity: "Jan 3, 2024"
   },
   {
@@ -333,7 +358,6 @@ const sampleSessions: ChatSession[] = [
     duration: "41 min",
     isFavourite: true,
     messageCount: 19,
-    topic: "Mathematics",
     lastActivity: "Jan 2, 2024"
   }
 ];
