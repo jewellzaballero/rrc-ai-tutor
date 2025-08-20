@@ -389,37 +389,37 @@ function ChatInterface({ sessionId, courseName, courseId, onBackToSessions }: { 
 // Generate sample messages for different sessions
 function getSampleMessages(sessionId: string): Array<{id: number, content: string, isUser: boolean, timestamp: string}> {
   const baseMessages = [
-    {
-      id: 1,
-      content: "Hi! I'm your AI tutor. I'm here to help you with your studies. What would you like to learn about today?",
-      isUser: false,
-      timestamp: "10:00 AM",
-    },
-    {
-      id: 2,
-      content: "Hi! I'm working on calculus and I'm having trouble understanding derivatives. Can you help me?",
-      isUser: true,
-      timestamp: "10:01 AM",
-    },
-    {
-      id: 3,
-      content: "Absolutely! Derivatives are a fundamental concept in calculus. Let me break it down for you.\n\nA derivative represents the rate of change of a function at a specific point. Think of it like the slope of a tangent line to a curve.\n\nFor example, if you have f(x) = x², the derivative f'(x) = 2x tells you how steep the curve is at any point x.\n\nWould you like me to walk through some specific examples or explain any particular aspect in more detail?",
-      isUser: false,
-      timestamp: "10:02 AM",
-    },
-    {
-      id: 4,
-      content: "That's really helpful! Could you show me how to find the derivative of f(x) = 3x³ + 2x - 1?",
-      isUser: true,
-      timestamp: "10:05 AM",
-    },
-    {
-      id: 5,
-      content: "Great question! Let me solve this step by step using the power rule.\n\nFor f(x) = 3x³ + 2x - 1:\n\n1. For 3x³: Using the power rule (d/dx[xⁿ] = nxⁿ⁻¹)\n   d/dx[3x³] = 3 × 3x²⁻¹ = 9x²\n\n2. For 2x: d/dx[2x] = 2 × 1 = 2\n\n3. For -1 (constant): d/dx[-1] = 0\n\nTherefore: f'(x) = 9x² + 2\n\nTry this with another function and let me know if you need help!",
-      isUser: false,
-      timestamp: "10:06 AM",
-    },
-  ];
+  {
+    id: 1,
+    content: "Hi! I'm your AI tutor. I'm here to help you with your studies. What would you like to learn about today?",
+    isUser: false,
+    timestamp: "10:00 AM",
+  },
+  {
+    id: 2,
+    content: "Hi! I'm working on calculus and I'm having trouble understanding derivatives. Can you help me?",
+    isUser: true,
+    timestamp: "10:01 AM",
+  },
+  {
+    id: 3,
+    content: "Absolutely! Derivatives are a fundamental concept in calculus. Let me break it down for you.\n\nA derivative represents the rate of change of a function at a specific point. Think of it like the slope of a tangent line to a curve.\n\nFor example, if you have f(x) = x², the derivative f'(x) = 2x tells you how steep the curve is at any point x.\n\nWould you like me to walk through some specific examples or explain any particular aspect in more detail?",
+    isUser: false,
+    timestamp: "10:02 AM",
+  },
+  {
+    id: 4,
+    content: "That's really helpful! Could you show me how to find the derivative of f(x) = 3x³ + 2x - 1?",
+    isUser: true,
+    timestamp: "10:05 AM",
+  },
+  {
+    id: 5,
+    content: "Great question! Let me solve this step by step using the power rule.\n\nFor f(x) = 3x³ + 2x - 1:\n\n1. For 3x³: Using the power rule (d/dx[xⁿ] = nxⁿ⁻¹)\n   d/dx[3x³] = 3 × 3x²⁻¹ = 9x²\n\n2. For 2x: d/dx[2x] = 2 × 1 = 2\n\n3. For -1 (constant): d/dx[-1] = 0\n\nTherefore: f'(x) = 9x² + 2\n\nTry this with another function and let me know if you need help!",
+    isUser: false,
+    timestamp: "10:06 AM",
+  },
+];
 
   // Add more messages for longer conversations to demonstrate scrolling
   if (sessionId === "1") {

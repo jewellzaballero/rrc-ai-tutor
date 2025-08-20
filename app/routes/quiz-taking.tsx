@@ -34,6 +34,10 @@ export default function QuizTaking() {
   const courseParam = searchParams.get("course");
   const courseIdParam = searchParams.get("courseId");
   const configParam = searchParams.get("config");
+  const reviewModeParam = searchParams.get("reviewMode");
+  const quizIdParam = searchParams.get("quizId");
+  
+  const isReviewMode = reviewModeParam === "true";
   
   // Parse quiz configuration from URL params
   let quizConfig: QuizConfig;
@@ -63,6 +67,7 @@ export default function QuizTaking() {
   // Generate quiz questions based on configuration
   const generateQuestions = (): QuizQuestion[] => {
     const sampleQuestions: QuizQuestion[] = [
+      // Derivatives questions
       {
         id: 1,
         question: "What is the derivative of x³?",
@@ -106,56 +111,119 @@ export default function QuizTaking() {
         module: "Derivatives",
         subUnit: "Exponential Functions"
       },
+      // Functions and Graphs questions
       {
         id: 6,
-        question: "Find the derivative of cos(x²).",
+        question: "What is the slope of the line y = 3x + 2?",
         type: "multiple-choice",
-        options: ["-2x sin(x²)", "-sin(x²)", "2x cos(x²)", "-cos(x²)"],
+        options: ["3", "2", "-3", "1"],
         correctAnswer: 0,
-        module: "Derivatives",
-        subUnit: "Chain Rule"
+        module: "Functions and Graphs",
+        subUnit: "Linear Functions"
       },
       {
         id: 7,
-        question: "What is the derivative of ln(x)?",
-        type: "multiple-choice",
-        options: ["1/x", "ln(x)", "x", "1"],
-        correctAnswer: 0,
-        module: "Derivatives",
-        subUnit: "Logarithmic Functions"
+        question: "The vertex of y = x² - 4x + 3 is at the point ______.",
+        type: "fill-in-blank",
+        correctAnswer: "(2, -1)",
+        module: "Functions and Graphs",
+        subUnit: "Quadratic Functions"
       },
       {
         id: 8,
-        question: "The derivative represents the instantaneous rate of change of a function.",
+        question: "An exponential function has the form f(x) = aˣ where a > 0 and a ≠ 1.",
         type: "true-false",
         options: ["True", "False"],
         correctAnswer: 0,
-        module: "Derivatives",
-        subUnit: "Concept"
+        module: "Functions and Graphs",
+        subUnit: "Exponential Functions"
       },
+      // Limits and Continuity questions
       {
         id: 9,
-        question: "Find the derivative of √x.",
+        question: "What is the limit of (x² - 1)/(x - 1) as x approaches 1?",
         type: "multiple-choice",
-        options: ["1/(2√x)", "√x", "2√x", "1/√x"],
+        options: ["2", "1", "0", "undefined"],
         correctAnswer: 0,
-        module: "Derivatives",
-        subUnit: "Power Rule"
+        module: "Limits and Continuity",
+        subUnit: "Understanding Limits"
       },
       {
         id: 10,
-        question: "Explain the chain rule and provide an example of when you would use it.",
+        question: "A function is continuous at a point if the limit exists and equals the function value at that point.",
+        type: "true-false",
+        options: ["True", "False"],
+        correctAnswer: 0,
+        module: "Limits and Continuity",
+        subUnit: "Continuity"
+      },
+      // Integration questions
+      {
+        id: 11,
+        question: "What is the integral of 2x dx?",
+        type: "multiple-choice",
+        options: ["x² + C", "2x² + C", "x + C", "2 + C"],
+        correctAnswer: 0,
+        module: "Integration",
+        subUnit: "Antiderivatives"
+      },
+      {
+        id: 12,
+        question: "Integration by parts is based on the product rule for derivatives.",
+        type: "true-false",
+        options: ["True", "False"],
+        correctAnswer: 0,
+        module: "Integration",
+        subUnit: "Integration by Parts"
+      },
+      // Applications of Calculus questions
+      {
+        id: 13,
+        question: "To find the maximum of a function, you set the derivative equal to ______.",
+        type: "fill-in-blank",
+        correctAnswer: "0",
+        module: "Applications of Calculus",
+        subUnit: "Optimization"
+      },
+      {
+        id: 14,
+        question: "Explain how to use calculus to find the area under a curve.",
         type: "essay",
-        module: "Derivatives",
-        subUnit: "Chain Rule"
+        module: "Applications of Calculus",
+        subUnit: "Area Under Curves"
       }
     ];
 
-    // Filter questions based on configuration and return the requested number
-    return sampleQuestions
-      .filter(q => quizConfig.modules.includes(q.module))
-      .filter(q => quizConfig.questionTypes.includes(q.type))
-      .slice(0, quizConfig.questionCount);
+    // Filter questions based on configuration
+    let filteredQuestions = sampleQuestions;
+    
+    // Filter by modules if specified
+    if (quizConfig.modules.length > 0) {
+      filteredQuestions = filteredQuestions.filter(q => 
+        quizConfig.modules.some(module => 
+          q.module.toLowerCase().includes(module.toLowerCase()) ||
+          module.toLowerCase().includes(q.module.toLowerCase())
+        )
+      );
+    }
+    
+    // Filter by question types if specified
+    if (quizConfig.questionTypes.length > 0) {
+      filteredQuestions = filteredQuestions.filter(q => 
+        quizConfig.questionTypes.includes(q.type)
+      );
+    }
+    
+    // If no questions match, fallback to all questions
+    if (filteredQuestions.length === 0) {
+      filteredQuestions = sampleQuestions;
+    }
+    
+    // Shuffle questions for variety
+    const shuffled = filteredQuestions.sort(() => Math.random() - 0.5);
+    
+    // Return the requested number of questions
+    return shuffled.slice(0, Math.min(quizConfig.questionCount, shuffled.length));
   };
 
   const [questions] = useState<QuizQuestion[]>(generateQuestions());
@@ -212,14 +280,84 @@ export default function QuizTaking() {
     console.log(`Quiz completed! Score: ${correctAnswers}/${questions.length}`);
   };
 
+  const handleTryAgain = () => {
+    // Reset all quiz states to start over with the same configuration
+    setQuizStarted(false);
+    setQuizCompleted(false);
+    setCurrentQuestionIndex(0);
+    setUserAnswers({});
+    setTimeRemaining(30 * 60); // Reset timer to 30 minutes
+  };
+
   const currentQuestion = questions[currentQuestionIndex];
+
+  // Safety check - if no questions are generated, show error
+  if (questions.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <Header 
+          title="Quiz Error"
+          subtitle="Unable to generate quiz questions"
+        >
+          <Link
+            to={courseIdParam ? `/course-sessions/${courseIdParam}` : "/courses"}
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5" />
+              <path d="M12 19l-7-7 7-7" />
+            </svg>
+          </Link>
+        </Header>
+        <main className="p-6 max-w-4xl mx-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8 text-center">
+            <div className="w-16 h-16 bg-red-100 dark:bg-red-900 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-600 dark:text-red-400">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="15" y1="9" x2="9" y2="15" />
+                <line x1="9" y1="9" x2="15" y2="15" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              Unable to Generate Quiz
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Sorry, we couldn't generate questions based on your selected criteria. Please try creating a new quiz with different settings.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link
+                to={`/quiz?course=${encodeURIComponent(courseParam || '')}&courseId=${courseIdParam}`}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M1 4v6h6" />
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                </svg>
+                Try Again
+              </Link>
+              <Link
+                to={courseIdParam ? `/course-sessions/${courseIdParam}` : "/courses"}
+                className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 12H5" />
+                  <path d="M12 19l-7-7 7-7" />
+                </svg>
+                Back to Course
+              </Link>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   if (!quizStarted) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header 
-          title={`${courseParam} Quiz`}
-          subtitle="Review your quiz configuration and start when ready"
+          title={isReviewMode ? `Review ${courseParam} Quiz` : `${courseParam} Quiz`}
+          subtitle={isReviewMode ? "Review a completed quiz or retake it" : "Review your quiz configuration and start when ready"}
         >
           <Link
             to={courseIdParam ? `/course-sessions/${courseIdParam}` : "/courses"}
@@ -235,17 +373,27 @@ export default function QuizTaking() {
         <main className="p-6 max-w-4xl mx-auto">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
             <div className="text-center mb-8">
-              <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600 dark:text-green-400">
-                  <path d="M9 12l2 2 4-4" />
-                  <circle cx="12" cy="12" r="10" />
-                </svg>
+              <div className={`w-16 h-16 ${isReviewMode ? 'bg-blue-100 dark:bg-blue-900' : 'bg-green-100 dark:bg-green-900'} rounded-full flex items-center justify-center mx-auto mb-4`}>
+                {isReviewMode ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600 dark:text-blue-400">
+                    <path d="M2 3h20l-2 14H4L2 3z" />
+                    <path d="M2 3l2 14h16" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600 dark:text-green-400">
+                    <path d="M9 12l2 2 4-4" />
+                    <circle cx="12" cy="12" r="10" />
+                  </svg>
+                )}
               </div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Quiz Ready!
+                {isReviewMode ? "Quiz Review" : "Quiz Ready!"}
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
-                Your personalized {courseParam} quiz has been generated
+                {isReviewMode 
+                  ? `Review your completed ${courseParam} quiz or retake it with the same configuration`
+                  : `Your personalized ${courseParam} quiz has been generated`
+                }
               </p>
             </div>
 
@@ -272,17 +420,42 @@ export default function QuizTaking() {
               </div>
             </div>
 
-            {/* Start Quiz Button */}
+            {/* Start/Retake Quiz Button */}
             <div className="text-center">
-              <button
-                onClick={() => setQuizStarted(true)}
-                className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="5,3 19,12 5,21" />
-                </svg>
-                Start Quiz
-              </button>
+              {isReviewMode ? (
+                <div className="flex gap-4 justify-center">
+                  <button
+                    onClick={() => setQuizStarted(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 4v6h6" />
+                      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                    </svg>
+                    Retake Quiz
+                  </button>
+                  <Link
+                    to={courseIdParam ? `/course-sessions/${courseIdParam}` : "/courses"}
+                    className="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M19 12H5" />
+                      <path d="M12 19l-7-7 7-7" />
+                    </svg>
+                    Back to Course
+                  </Link>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setQuizStarted(true)}
+                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 mx-auto"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="5,3 19,12 5,21" />
+                  </svg>
+                  Start Quiz
+                </button>
+              )}
             </div>
           </div>
         </main>
@@ -346,19 +519,65 @@ export default function QuizTaking() {
             </p>
 
             <div className="flex gap-4 justify-center">
-              <Link
-                to={`/quiz?course=${encodeURIComponent(courseParam || '')}&courseId=${courseIdParam}`}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              <button
+                onClick={handleTryAgain}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
               >
-                Take Another Quiz
-              </Link>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M1 4v6h6" />
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                </svg>
+                Retake Quiz
+              </button>
               <Link
                 to={courseIdParam ? `/course-sessions/${courseIdParam}` : "/courses"}
-                className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
               >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 12H5" />
+                  <path d="M12 19l-7-7 7-7" />
+                </svg>
                 Back to Course
               </Link>
             </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Safety check for current question
+  if (!currentQuestion) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <Header 
+          title="Quiz Error"
+          subtitle="Question not found"
+        >
+          <button
+            onClick={() => navigate(courseIdParam ? `/course-sessions/${courseIdParam}` : "/courses")}
+            className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </Header>
+        <main className="p-6 max-w-4xl mx-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-8 text-center">
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+              Quiz Question Error
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Unable to load the current question. Please restart the quiz.
+            </p>
+            <Link
+              to={`/quiz?course=${encodeURIComponent(courseParam || '')}&courseId=${courseIdParam}`}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              Restart Quiz
+            </Link>
           </div>
         </main>
       </div>

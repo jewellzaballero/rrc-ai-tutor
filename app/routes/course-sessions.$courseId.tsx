@@ -178,7 +178,7 @@ export default function CourseSessions() {
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-600 dark:text-yellow-400">
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
                   </svg>
                 </div>
                 <div>
@@ -328,6 +328,8 @@ export default function CourseSessions() {
                         quiz={quiz}
                         onToggleFavourite={toggleQuizFavourite}
                         isCompact
+                        courseTitle={courseTitle}
+                        courseId={courseId}
                       />
                     ))}
                   </div>
@@ -344,14 +346,16 @@ export default function CourseSessions() {
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Quizzes</h3>
                 </div>
                 <div className="space-y-3">
-                  {recentQuizzes.slice(0, 5).map((quiz) => (
-                    <QuizCard
-                      key={quiz.id}
-                      quiz={quiz}
-                      onToggleFavourite={toggleQuizFavourite}
-                      isCompact
-                    />
-                  ))}
+                                  {recentQuizzes.slice(0, 5).map((quiz) => (
+                  <QuizCard
+                    key={quiz.id}
+                    quiz={quiz}
+                    onToggleFavourite={toggleQuizFavourite}
+                    isCompact
+                    courseTitle={courseTitle}
+                    courseId={courseId}
+                  />
+                ))}
                 </div>
                 {recentQuizzes.length > 5 && (
                   <div className="mt-4 text-center">
@@ -400,6 +404,8 @@ interface QuizCardProps {
   quiz: Quiz;
   onToggleFavourite: (id: string) => void;
   isCompact?: boolean;
+  courseTitle?: string;
+  courseId?: string;
 }
 
 function SessionCard({ session, onToggleFavourite, isCompact = false, courseId }: SessionCardProps) {
@@ -456,7 +462,7 @@ function SessionCard({ session, onToggleFavourite, isCompact = false, courseId }
   );
 }
 
-function QuizCard({ quiz, onToggleFavourite, isCompact = false }: QuizCardProps) {
+function QuizCard({ quiz, onToggleFavourite, isCompact = false, courseTitle, courseId }: QuizCardProps) {
   const getStatusColor = (status: Quiz["status"]) => {
     switch (status) {
       case "completed":
@@ -479,8 +485,21 @@ function QuizCard({ quiz, onToggleFavourite, isCompact = false }: QuizCardProps)
     }
   };
 
+  // Create quiz configuration from quiz data
+  const quizConfig = {
+    modules: [quiz.topic], // Use topic as module
+    subUnits: [], // Could be expanded based on quiz data
+    questionCount: quiz.questionCount,
+    questionTypes: ["multiple-choice", "true-false", "short-answer"] // Default types
+  };
+
+  // Use current course context instead of quiz topic
+  const currentCourse = courseTitle || quiz.topic;
+  const currentCourseId = courseId || '';
+
   return (
-    <div 
+    <Link 
+      to={`/quiz-taking?course=${encodeURIComponent(currentCourse)}&courseId=${currentCourseId}&config=${encodeURIComponent(JSON.stringify(quizConfig))}&reviewMode=true&quizId=${quiz.id}`}
       className={`block bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md hover:border-green-300 dark:hover:border-green-600 transition-all cursor-pointer ${
         isCompact ? '' : 'h-full'
       }`}
@@ -547,7 +566,7 @@ function QuizCard({ quiz, onToggleFavourite, isCompact = false }: QuizCardProps)
           </span>
         )}
       </div>
-    </div>
+    </Link>
   );
 }
 
