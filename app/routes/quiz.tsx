@@ -28,14 +28,14 @@ export default function Quiz() {
       courseName={courseParam}
       courseId={courseIdParam}
       onSubmit={(formData) => {
-        // Create a new quiz and navigate to course sessions
-        // In a real app, you'd save the quiz to your data store here
-        alert(`Quiz "${courseParam} Practice Quiz" created successfully with ${formData.questionCount} questions!`);
-        if (courseIdParam) {
-          navigate(`/course-sessions/${courseIdParam}`);
-        } else {
-          navigate("/courses");
-        }
+        // Create the quiz configuration and navigate to quiz-taking page
+        const quizConfig = encodeURIComponent(JSON.stringify(formData));
+        const params = new URLSearchParams({
+          course: courseParam || '',
+          courseId: courseIdParam || '',
+          config: quizConfig
+        });
+        navigate(`/quiz-taking?${params.toString()}`);
       }}
       onCancel={() => {
         if (courseIdParam) {
