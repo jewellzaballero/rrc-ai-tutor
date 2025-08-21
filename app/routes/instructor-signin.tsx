@@ -1,6 +1,15 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function InstructorSignIn() {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, you would validate credentials here
+    // For demo purposes, we'll just redirect to the dashboard
+    navigate("/instructor-dashboard");
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-16">
@@ -33,7 +42,7 @@ export default function InstructorSignIn() {
 
           {/* Login Form */}
           <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-xl">
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Email Address
