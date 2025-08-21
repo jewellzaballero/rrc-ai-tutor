@@ -3,6 +3,18 @@ import { Link } from "react-router";
 export function Welcome() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+      {/* Subtle Instructor Toggle */}
+      <div className="absolute top-4 right-4 z-10">
+        <Link
+          to="/instructor-signin"
+          className="group flex items-center gap-2 px-3 py-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg border border-gray-200/50 dark:border-gray-700/50 hover:bg-white/70 dark:hover:bg-gray-800/70"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+          </svg>
+          <span>Instructor</span>
+        </Link>
+      </div>
       <div className="container mx-auto px-4 py-16">
         <div className="flex flex-col items-center text-center space-y-12">
           {/* Hero Section */}
