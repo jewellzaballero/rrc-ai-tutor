@@ -170,7 +170,18 @@ export default function InstructorCourseMaterials() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{currentCourse.name}</h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{currentCourse.name}</h1>
+                <Link
+                  to={`/instructor-course-edit/${courseId}`}
+                  className="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+                  title="Edit course details"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                </Link>
+              </div>
               <div className="flex items-center mt-2 space-x-4 text-sm text-slate-600 dark:text-slate-400">
                 <span>{currentCourse.code}</span>
                 <span>•</span>
