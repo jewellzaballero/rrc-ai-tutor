@@ -6,8 +6,8 @@ export default function InstructorSignIn() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, you would validate credentials here
-    // For demo purposes, we'll just redirect to the dashboard
-    navigate("/instructor-dashboard");
+    // For demo purposes, we'll just redirect to the courses page
+    navigate("/instructor/courses");
   };
 
   return (
