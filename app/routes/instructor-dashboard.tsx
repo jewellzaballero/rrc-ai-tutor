@@ -108,11 +108,6 @@ export default function InstructorDashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <button className="p-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-3.405-3.405A2.032 2.032 0 0118 12V6a6 6 0 10-12 0v6c0 .898-.312 1.752-.595 2.595L2 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-              </button>
               <Link 
                 to="/"
                 className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
