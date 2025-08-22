@@ -13,6 +13,7 @@ export default function CourseDashboard() {
   const { courseId } = useParams();
   const [activeTab, setActiveTab] = useState("analytics");
   const [isAddMaterialModalOpen, setIsAddMaterialModalOpen] = useState(false);
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   
   // Mock data - in real app this would come from API based on courseId
   const course = {
@@ -177,6 +178,137 @@ export default function CourseDashboard() {
     // Handle file upload logic here
     console.log('Adding material:', formData);
     setIsAddMaterialModalOpen(false);
+  };
+
+  const handleUpdateCourse = (formData: FormData) => {
+    // Handle course update logic here
+    console.log('Updating course:', formData);
+    setIsSettingsModalOpen(false);
+  };
+
+  const SettingsModal = () => {
+    if (!isSettingsModalOpen) return null;
+
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        {/* Backdrop */}
+        <div 
+          className="absolute inset-0 bg-black bg-opacity-50 transition-opacity" 
+          onClick={() => setIsSettingsModalOpen(false)}
+        ></div>
+
+        {/* Modal */}
+        <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Course Settings
+            </h3>
+            <button
+              onClick={() => setIsSettingsModalOpen(false)}
+              className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className="p-6">
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.target as HTMLFormElement);
+              handleUpdateCourse(formData);
+            }}>
+              <div className="space-y-4">
+                {/* Course Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Course Name
+                  </label>
+                  <input
+                    type="text"
+                    name="courseName"
+                    defaultValue={course.name}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    placeholder="Enter course name"
+                    required
+                  />
+                </div>
+
+                {/* Course Code */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Course Code
+                  </label>
+                  <input
+                    type="text"
+                    name="courseCode"
+                    defaultValue={course.code}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    placeholder="e.g., PROG-1400"
+                    required
+                  />
+                </div>
+
+                {/* Semester */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Semester
+                  </label>
+                  <select
+                    name="semester"
+                    defaultValue={course.semester}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    required
+                  >
+                    <option value="">Select semester</option>
+                    <option value="Fall 2024">Fall 2024</option>
+                    <option value="Winter 2025">Winter 2025</option>
+                    <option value="Spring 2025">Spring 2025</option>
+                    <option value="Summer 2025">Summer 2025</option>
+                    <option value="Fall 2025">Fall 2025</option>
+                  </select>
+                </div>
+
+                {/* Description */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Description
+                  </label>
+                  <textarea
+                    name="description"
+                    rows={4}
+                    defaultValue={course.description}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    placeholder="Enter course description"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <button
+                  type="button"
+                  onClick={() => setIsSettingsModalOpen(false)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   const AddMaterialModal = () => {
@@ -711,7 +843,10 @@ export default function CourseDashboard() {
             </div>
             <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">{course.description}</p>
           </div>
-          <button className="inline-flex items-center px-4 py-2 bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-lg transition-colors">
+          <button 
+            onClick={() => setIsSettingsModalOpen(true)}
+            className="inline-flex items-center px-4 py-2 bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-lg transition-colors"
+          >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
             </svg>
@@ -746,6 +881,9 @@ export default function CourseDashboard() {
 
         {/* Add Material Modal */}
         <AddMaterialModal />
+
+        {/* Settings Modal */}
+        <SettingsModal />
       </div>
     </InstructorLayout>
   );
