@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router";
 import { InstructorLayout } from "~/components/InstructorLayout";
 
 export default function InstructorCourses() {
@@ -262,9 +263,12 @@ export default function InstructorCourses() {
                       <tr key={course.id} className="hover:bg-slate-50 dark:hover:bg-gray-700/50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
-                            <div className="text-sm font-medium text-slate-900 dark:text-white">
+                            <Link 
+                              to={`/instructor/course/${course.id}`}
+                              className="text-sm font-medium text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                            >
                               {course.name}
-                            </div>
+                            </Link>
                             <div className="text-sm text-blue-600 dark:text-blue-400 font-medium">
                               {course.code}
                             </div>
