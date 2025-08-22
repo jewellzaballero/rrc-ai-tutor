@@ -48,7 +48,6 @@ interface Quiz {
   maxScore: number;
   topic: string;
   status: "completed" | "in-progress" | "not-started";
-  difficulty: "easy" | "medium" | "hard";
   lastActivity: string;
 }
 
@@ -485,17 +484,6 @@ function QuizCard({ quiz, onToggleFavourite, isCompact = false, courseTitle, cou
     }
   };
 
-  const getDifficultyColor = (difficulty: Quiz["difficulty"]) => {
-    switch (difficulty) {
-      case "easy":
-        return "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
-      case "hard":
-        return "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400";
-    }
-  };
-
   // Create quiz configuration from quiz data
   const quizConfig = {
     modules: [quiz.topic], // Use topic as module
@@ -521,9 +509,6 @@ function QuizCard({ quiz, onToggleFavourite, isCompact = false, courseTitle, cou
             <h3 className="font-semibold text-gray-900 dark:text-white truncate">
               {quiz.title}
             </h3>
-            <span className={`px-2 py-1 text-xs font-medium rounded-full whitespace-nowrap ${getDifficultyColor(quiz.difficulty)}`}>
-              {quiz.difficulty}
-            </span>
             <span className={`px-2 py-1 text-xs font-medium rounded-full whitespace-nowrap ${getStatusColor(quiz.status)}`}>
               {quiz.status.replace("-", " ")}
             </span>
@@ -664,7 +649,6 @@ const sampleQuizzes: Quiz[] = [
     maxScore: 15,
     topic: "Calculus",
     status: "completed",
-    difficulty: "medium",
     lastActivity: "Jan 14, 2024"
   },
   {
@@ -679,7 +663,6 @@ const sampleQuizzes: Quiz[] = [
     maxScore: 20,
     topic: "Calculus",
     status: "completed",
-    difficulty: "hard",
     lastActivity: "Jan 10, 2024"
   },
   {
@@ -694,7 +677,6 @@ const sampleQuizzes: Quiz[] = [
     maxScore: 12,
     topic: "Algebra",
     status: "completed",
-    difficulty: "easy",
     lastActivity: "Jan 11, 2024"
   },
   {
@@ -706,7 +688,6 @@ const sampleQuizzes: Quiz[] = [
     isFavourite: false,
     questionCount: 18,
     status: "in-progress",
-    difficulty: "hard",
     topic: "Calculus",
     maxScore: 18,
     lastActivity: "Jan 5, 2024"
@@ -720,7 +701,6 @@ const sampleQuizzes: Quiz[] = [
     isFavourite: false,
     questionCount: 14,
     status: "not-started",
-    difficulty: "medium",
     topic: "Functions",
     maxScore: 14,
     lastActivity: "Jan 8, 2024"
@@ -737,7 +717,6 @@ const sampleQuizzes: Quiz[] = [
     maxScore: 16,
     topic: "Trigonometry",
     status: "completed",
-    difficulty: "medium",
     lastActivity: "Dec 28, 2023"
   }
 ];
