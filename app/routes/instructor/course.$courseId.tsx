@@ -150,14 +150,14 @@ export default function CourseDashboard() {
     }
   ];
 
-  const studentEngagement = [
-    { day: "Mon", engagement: 75 },
-    { day: "Tue", engagement: 82 },
-    { day: "Wed", engagement: 68 },
-    { day: "Thu", engagement: 91 },
-    { day: "Fri", engagement: 73 },
-    { day: "Sat", engagement: 45 },
-    { day: "Sun", engagement: 38 }
+  const weeklyEngagement = [
+    { day: "Mon", engagement: 75, queries: 34, activeStudents: 28, avgSessionTime: "12m" },
+    { day: "Tue", engagement: 82, queries: 41, activeStudents: 32, avgSessionTime: "15m" },
+    { day: "Wed", engagement: 68, queries: 28, activeStudents: 25, avgSessionTime: "10m" },
+    { day: "Thu", engagement: 91, queries: 52, activeStudents: 38, avgSessionTime: "18m" },
+    { day: "Fri", engagement: 73, queries: 31, activeStudents: 29, avgSessionTime: "11m" },
+    { day: "Sat", engagement: 45, queries: 18, activeStudents: 15, avgSessionTime: "8m" },
+    { day: "Sun", engagement: 38, queries: 12, activeStudents: 12, avgSessionTime: "6m" }
   ];
 
   const moduleInteractions = [
@@ -543,21 +543,127 @@ export default function CourseDashboard() {
               {/* Weekly Engagement Chart */}
               <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm">
                 <div className="p-6 border-b border-slate-200 dark:border-gray-700">
-                  <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Weekly Engagement</h2>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Student activity throughout the week</p>
+                  <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Weekly Activity</h2>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">Student engagement and query patterns throughout the week</p>
                 </div>
                 <div className="p-6">
-                  <div className="flex items-end justify-between h-32 space-x-2">
-                    {studentEngagement.map((day, index) => (
-                      <div key={index} className="flex flex-col items-center flex-1">
-                        <div 
-                          className="w-full bg-blue-600 rounded-t transition-all duration-300 hover:bg-blue-700"
-                          style={{ height: `${(day.engagement / 100) * 80}%`, minHeight: '8px' }}
-                          title={`${day.day}: ${day.engagement}%`}
-                        ></div>
-                        <span className="text-xs text-slate-500 dark:text-slate-400 mt-2">{day.day}</span>
+                  <div className="space-y-6">
+                    {/* Engagement Chart */}
+                    <div>
+                      <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Engagement Rate</h3>
+                      <div className="flex items-end justify-between h-32 space-x-2">
+                        {weeklyEngagement.map((day, index) => {
+                          // Use a simple approach: scale engagement from 40-100% to use more visual space
+                          const height = Math.max((day.engagement - 20) * 1.2, 20);
+                          
+                          return (
+                            <div key={index} className="flex flex-col items-center flex-1">
+                              <div 
+                                className="w-full bg-blue-600 dark:bg-blue-500 rounded-t-sm transition-all duration-300 hover:bg-blue-700 dark:hover:bg-blue-400 cursor-pointer"
+                                style={{ 
+                                  height: `${height}px`,
+                                  minHeight: '20px'
+                                }}
+                                title={`${day.day}: ${day.engagement}% engagement`}
+                              ></div>
+                              <span className="text-xs text-slate-500 dark:text-slate-400 mt-2">{day.day}</span>
+                              <span className="text-xs font-medium text-slate-700 dark:text-slate-300">{day.engagement}%</span>
+                            </div>
+                          );
+                        })}
                       </div>
-                    ))}
+                    </div>
+
+                    {/* Queries Chart */}
+                    <div>
+                      <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Daily Queries</h3>
+                      <div className="flex items-end justify-between h-24 space-x-2">
+                        {weeklyEngagement.map((day, index) => {
+                          // Simple scaling: queries * 1.5 + 15px base height
+                          const height = Math.max(day.queries * 1.5 + 15, 20);
+                          
+                          return (
+                            <div key={index} className="flex flex-col items-center flex-1">
+                              <div 
+                                className="w-full bg-green-600 dark:bg-green-500 rounded-t-sm transition-all duration-300 hover:bg-green-700 dark:hover:bg-green-400 cursor-pointer"
+                                style={{ 
+                                  height: `${height}px`,
+                                  minHeight: '16px'
+                                }}
+                                title={`${day.day}: ${day.queries} queries`}
+                              ></div>
+                              <span className="text-xs text-slate-500 dark:text-slate-400 mt-2">{day.day}</span>
+                              <span className="text-xs font-medium text-slate-700 dark:text-slate-300">{day.queries}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Summary Stats */}
+                    <div className="grid grid-cols-4 gap-3 pt-4 border-t border-slate-200 dark:border-gray-700">
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-slate-900 dark:text-white">
+                          {weeklyEngagement.reduce((sum, day) => sum + day.queries, 0)}
+                        </div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400">Total Queries</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-slate-900 dark:text-white">
+                          {Math.round(weeklyEngagement.reduce((sum, day) => sum + day.engagement, 0) / weeklyEngagement.length)}%
+                        </div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400">Avg Engagement</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-slate-900 dark:text-white">
+                          {Math.round(weeklyEngagement.reduce((sum, day) => sum + day.activeStudents, 0) / weeklyEngagement.length)}
+                        </div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400">Avg Active Users</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-slate-900 dark:text-white">
+                          {Math.round(weeklyEngagement.reduce((sum, day) => sum + parseInt(day.avgSessionTime), 0) / weeklyEngagement.length)}m
+                        </div>
+                        <div className="text-xs text-slate-500 dark:text-slate-400">Avg Session</div>
+                      </div>
+                    </div>
+
+                    {/* Detailed Breakdown Table */}
+                    <div className="pt-4 border-t border-slate-200 dark:border-gray-700">
+                      <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Daily Breakdown</h3>
+                      <div className="overflow-x-auto">
+                        <table className="min-w-full">
+                          <thead>
+                            <tr className="text-xs text-slate-500 dark:text-slate-400">
+                              <th className="text-left pb-2">Day</th>
+                              <th className="text-center pb-2">Engagement</th>
+                              <th className="text-center pb-2">Queries</th>
+                              <th className="text-center pb-2">Active Users</th>
+                              <th className="text-center pb-2">Avg Session</th>
+                            </tr>
+                          </thead>
+                          <tbody className="space-y-1">
+                            {weeklyEngagement.map((day, index) => (
+                              <tr key={index} className="text-sm">
+                                <td className="py-1 font-medium text-slate-700 dark:text-slate-300">{day.day}</td>
+                                <td className="py-1 text-center">
+                                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                    day.engagement >= 80 ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' :
+                                    day.engagement >= 60 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400' :
+                                    'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                                  }`}>
+                                    {day.engagement}%
+                                  </span>
+                                </td>
+                                <td className="py-1 text-center text-slate-600 dark:text-slate-400">{day.queries}</td>
+                                <td className="py-1 text-center text-slate-600 dark:text-slate-400">{day.activeStudents}</td>
+                                <td className="py-1 text-center text-slate-600 dark:text-slate-400">{day.avgSessionTime}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
