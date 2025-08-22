@@ -3,6 +3,20 @@ import { useState } from "react";
 import { Header } from "../components/Header";
 import { getCourseById } from "../data/courses";
 
+// Custom PushPin icon component (Material UI style)
+const PushPinIcon = ({ className, size = 16, color = "currentColor" }: { className?: string; size?: number; color?: string }) => (
+  <svg 
+    className={className}
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill={color} 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" />
+  </svg>
+);
+
 export function meta() {
   return [
     { title: "Course Sessions - RRC AI Tutor" },
@@ -70,7 +84,7 @@ export default function CourseSessions() {
     );
   };
 
-  const favouriteSessions = sessions.filter(session => session.isFavourite);
+  const pinnedSessions = sessions.filter(session => session.isFavourite);
   const recentSessions = sessions
     .filter(session => !session.isFavourite)
     .sort((a, b) => new Date(b.lastActivity).getTime() - new Date(a.lastActivity).getTime());
@@ -138,7 +152,7 @@ export default function CourseSessions() {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">AI Sessions</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Chat Sessions</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">{sessions.length}</p>
                 </div>
               </div>
@@ -198,7 +212,7 @@ export default function CourseSessions() {
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600 dark:text-blue-400">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   </svg>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">AI Chat Sessions</h2>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Chat Sessions</h2>
                 </div>
                 <Link
                   to={`/chat?sessionId=new&course=${encodeURIComponent(courseTitle)}&courseId=${courseId}`}
@@ -214,16 +228,14 @@ export default function CourseSessions() {
               </div>
 
               {/* Favourite Sessions */}
-              {favouriteSessions.length > 0 && (
+              {pinnedSessions.length > 0 && (
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
-                      <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
-                    </svg>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Favourites</h3>
+                    <PushPinIcon size={16} color="#eab308" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Pinned</h3>
                   </div>
                   <div className="space-y-3">
-                    {favouriteSessions.map((session) => (
+                    {pinnedSessions.map((session) => (
                       <SessionCard
                         key={session.id}
                         session={session}
@@ -316,10 +328,8 @@ export default function CourseSessions() {
               {favouriteQuizzes.length > 0 && (
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
-                      <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
-                    </svg>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Favourites</h3>
+                    <PushPinIcon size={16} color="#eab308" />
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Pinned</h3>
                   </div>
                   <div className="space-y-3">
                     {favouriteQuizzes.map((quiz) => (
@@ -439,9 +449,10 @@ function SessionCard({ session, onToggleFavourite, isCompact = false, courseId }
               : 'text-gray-400 hover:text-yellow-500'
           }`}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={session.isFavourite ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
-          </svg>
+          <PushPinIcon 
+            size={20} 
+            color={session.isFavourite ? '#eab308' : '#9ca3af'}
+          />
         </button>
       </div>
 
@@ -533,9 +544,10 @@ function QuizCard({ quiz, onToggleFavourite, isCompact = false, courseTitle, cou
               : 'text-gray-400 hover:text-yellow-500'
           }`}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={quiz.isFavourite ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
-          </svg>
+          <PushPinIcon 
+            size={20} 
+            color={quiz.isFavourite ? '#eab308' : '#9ca3af'}
+          />
         </button>
       </div>
 

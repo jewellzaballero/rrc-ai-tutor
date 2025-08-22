@@ -3,6 +3,20 @@ import { useState, useEffect, useRef } from "react";
 import React from "react";
 import { Header } from "../components/Header";
 
+// Custom PushPin icon component (Material UI style)
+const PushPinIcon = ({ className, size = 16, color = "currentColor" }: { className?: string; size?: number; color?: string }) => (
+  <svg 
+    className={className}
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill={color} 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z" />
+  </svg>
+);
+
 export function meta() {
   return [
     { title: "AI Chat - RRC AI Tutor" },
@@ -93,7 +107,7 @@ function ChatInterface({ sessionId, courseName, courseId, onBackToSessions }: { 
     );
   };
   
-  const favouriteSessions = sessions.filter(session => session.isFavourite);
+  const pinnedSessions = sessions.filter(session => session.isFavourite);
   const recentSessionsList = sessions
     .filter(session => !session.isFavourite)
     .sort((a, b) => new Date(b.lastActivity).getTime() - new Date(a.lastActivity).getTime());
@@ -186,16 +200,14 @@ function ChatInterface({ sessionId, courseName, courseId, onBackToSessions }: { 
             </button>
             
             {/* Favourite Sessions */}
-            {favouriteSessions.length > 0 && (
+            {pinnedSessions.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
-                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
-                  </svg>
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Favourites</h3>
+                  <PushPinIcon size={16} color="#eab308" />
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Pinned</h3>
                 </div>
                 <div className="space-y-2">
-                  {favouriteSessions.map((session) => (
+                  {pinnedSessions.map((session) => (
                     <SidebarSessionCard
                       key={session.id}
                       session={session}
@@ -565,9 +577,10 @@ function SidebarSessionCard({ session, isActive, onSelect, onToggleFavourite }: 
               : 'text-gray-400 hover:text-yellow-500'
           }`}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill={session.isFavourite ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
-          </svg>
+          <PushPinIcon 
+            size={14} 
+            color={session.isFavourite ? '#eab308' : '#9ca3af'}
+          />
         </button>
       </div>
     </div>
