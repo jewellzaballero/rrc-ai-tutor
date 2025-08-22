@@ -12,6 +12,7 @@ export function meta() {
 export default function CourseDashboard() {
   const { courseId } = useParams();
   const [activeTab, setActiveTab] = useState("analytics");
+  const [isAddMaterialModalOpen, setIsAddMaterialModalOpen] = useState(false);
   
   // Mock data - in real app this would come from API based on courseId
   const course = {
@@ -171,6 +172,138 @@ export default function CourseDashboard() {
     { id: "materials", name: "Materials", icon: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" },
     { id: "students", name: "Students", icon: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" }
   ];
+
+  const handleAddMaterial = (formData: FormData) => {
+    // Handle file upload logic here
+    console.log('Adding material:', formData);
+    setIsAddMaterialModalOpen(false);
+  };
+
+  const AddMaterialModal = () => {
+    if (!isAddMaterialModalOpen) return null;
+
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        {/* Backdrop */}
+        <div 
+          className="absolute inset-0 bg-black bg-opacity-50 transition-opacity" 
+          onClick={() => setIsAddMaterialModalOpen(false)}
+        ></div>
+
+        {/* Modal */}
+        <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Add Course Material
+            </h3>
+            <button
+              onClick={() => setIsAddMaterialModalOpen(false)}
+              className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className="p-6">
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.target as HTMLFormElement);
+              handleAddMaterial(formData);
+            }}>
+              <div className="space-y-4">
+                {/* File Upload */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Upload File
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
+                    <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      <label htmlFor="file-upload" className="cursor-pointer font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
+                        <span>Upload a file</span>
+                        <input id="file-upload" name="file" type="file" className="sr-only" required />
+                      </label>
+                      <span className="ml-1">or drag and drop</span>
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      PDF, DOC, DOCX, TXT up to 10MB
+                    </p>
+                  </div>
+                </div>
+
+                {/* Material Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Material Name
+                  </label>
+                  <input
+                    type="text"
+                    name="materialName"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    placeholder="Enter a descriptive name"
+                  />
+                </div>
+
+                {/* Description */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Description (Optional)
+                  </label>
+                  <textarea
+                    name="description"
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    placeholder="Brief description of the material content"
+                  />
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Category
+                  </label>
+                  <select
+                    name="category"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  >
+                    <option value="">Select a category</option>
+                    <option value="lecture">Lecture Notes</option>
+                    <option value="assignment">Assignment</option>
+                    <option value="reference">Reference Material</option>
+                    <option value="example">Code Examples</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <button
+                  type="button"
+                  onClick={() => setIsAddMaterialModalOpen(false)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                >
+                  Upload Material
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -351,7 +484,10 @@ export default function CourseDashboard() {
                   <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Course Materials</h2>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Manage uploaded files and their usage by the AI tutor</p>
                 </div>
-                <button className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+                <button 
+                  onClick={() => setIsAddMaterialModalOpen(true)}
+                  className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+                >
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
@@ -607,6 +743,9 @@ export default function CourseDashboard() {
 
         {/* Tab Content */}
         {renderTabContent()}
+
+        {/* Add Material Modal */}
+        <AddMaterialModal />
       </div>
     </InstructorLayout>
   );
