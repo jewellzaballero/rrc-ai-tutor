@@ -14,6 +14,7 @@ export default function CourseDashboard() {
   const [activeTab, setActiveTab] = useState("analytics");
   const [isAddMaterialModalOpen, setIsAddMaterialModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isAddStudentModalOpen, setIsAddStudentModalOpen] = useState(false);
   
   // Mock data - in real app this would come from API based on courseId
   const course = {
@@ -73,7 +74,7 @@ export default function CourseDashboard() {
     {
       id: 2,
       name: "Java Syntax Guide.pdf",
-      type: "PDF",
+      type: "PDF", 
       size: "1.8 MB", 
       uploadDate: "2024-01-20",
       queries: 89,
@@ -186,10 +187,16 @@ export default function CourseDashboard() {
     setIsSettingsModalOpen(false);
   };
 
+  const handleAddStudent = (formData: FormData) => {
+    // Handle add student logic here
+    console.log('Adding student:', formData);
+    setIsAddStudentModalOpen(false);
+  };
+
   const SettingsModal = () => {
     if (!isSettingsModalOpen) return null;
 
-    return (
+  return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         {/* Backdrop */}
         <div 
@@ -215,7 +222,7 @@ export default function CourseDashboard() {
           </div>
 
           {/* Content */}
-          <div className="p-6">
+      <div className="p-6">
             <form onSubmit={(e) => {
               e.preventDefault();
               const formData = new FormData(e.target as HTMLFormElement);
@@ -311,6 +318,108 @@ export default function CourseDashboard() {
     );
   };
 
+  const AddStudentModal = () => {
+    if (!isAddStudentModalOpen) return null;
+
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        {/* Backdrop */}
+        <div 
+          className="absolute inset-0 bg-black bg-opacity-50 transition-opacity" 
+          onClick={() => setIsAddStudentModalOpen(false)}
+        ></div>
+
+        {/* Modal */}
+        <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Add Student
+            </h3>
+            <button
+              onClick={() => setIsAddStudentModalOpen(false)}
+              className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className="p-6">
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.target as HTMLFormElement);
+              handleAddStudent(formData);
+            }}>
+              <div className="space-y-4">
+                {/* Student Number */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Student Number
+                  </label>
+                  <input
+                    type="text"
+                    name="studentNumber"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    placeholder="e.g., S2024006"
+                    required
+                  />
+                </div>
+
+                {/* Student Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Student Name
+                  </label>
+                  <input
+                    type="text"
+                    name="studentName"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    placeholder="Enter full name"
+                    required
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                    placeholder="student@college.edu"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <button
+                  type="button"
+                  onClick={() => setIsAddStudentModalOpen(false)}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                >
+                  Add Student
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+            </div>
+    );
+  };
+
   const AddMaterialModal = () => {
     if (!isAddMaterialModalOpen) return null;
 
@@ -355,7 +464,7 @@ export default function CourseDashboard() {
                   <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
                     <svg className="mx-auto h-12 w-12 text-gray-400 mb-4" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                       <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+            </svg>
                     <div className="text-sm text-gray-600 dark:text-gray-400">
                       <label htmlFor="file-upload" className="cursor-pointer font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
                         <span>Upload a file</span>
@@ -428,7 +537,7 @@ export default function CourseDashboard() {
                   className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                 >
                   Upload Material
-                </button>
+          </button>
               </div>
             </form>
           </div>
@@ -442,116 +551,116 @@ export default function CourseDashboard() {
       case "analytics":
         return (
           <div className="space-y-8">
-            {/* Stats Grid */}
+        {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-                <div className="flex items-center">
-                  <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                    <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                    </svg>
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Active Students</p>
-                    <p className="text-2xl font-semibold text-slate-900 dark:text-white">{course.activeStudents}</p>
-                  </div>
-                </div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <div className="flex items-center">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                </svg>
               </div>
-              
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-                <div className="flex items-center">
-                  <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                    <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Total Questions</p>
-                    <p className="text-2xl font-semibold text-slate-900 dark:text-white">{course.totalQuestions}</p>
-                  </div>
-                </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Active Students</p>
+                <p className="text-2xl font-semibold text-slate-900 dark:text-white">{course.activeStudents}</p>
               </div>
+            </div>
+          </div>
+          
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <div className="flex items-center">
+              <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Total Questions</p>
+                <p className="text-2xl font-semibold text-slate-900 dark:text-white">{course.totalQuestions}</p>
+              </div>
+            </div>
+          </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-                <div className="flex items-center">
-                  <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
-                    <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Avg Engagement</p>
-                    <p className="text-2xl font-semibold text-slate-900 dark:text-white">{course.avgEngagement}%</p>
-                  </div>
-                </div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <div className="flex items-center">
+              <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
+                <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
               </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Avg Engagement</p>
+                <p className="text-2xl font-semibold text-slate-900 dark:text-white">{course.avgEngagement}%</p>
+              </div>
+            </div>
+          </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-                <div className="flex items-center">
-                  <div className="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
-                    <svg className="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+            <div className="flex items-center">
+              <div className="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
+                <svg className="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4a2.25 2.25 0 014.5 0v.236m-4.5 0c.94-.196 2.478-.231 4.5-.231s3.56.035 4.5.231M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4a2.25 2.25 0 00-4.5 0v.236m4.5 0c1.94.196 3.798.47 5.638.777a6.003 6.003 0 01-4.399 5.472m0-13.155a2.25 2.25 0 00-2.25 2.25v.236m2.25-.236a2.25 2.25 0 012.25 2.25v.236m-2.25-.236c.94.196 2.478.231 4.5.231s3.56-.035 4.5-.231" />
-                    </svg>
-                  </div>
-                  <div className="ml-4">
+                </svg>
+              </div>
+              <div className="ml-4">
                     <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Engagement Rate</p>
                     <p className="text-2xl font-semibold text-slate-900 dark:text-white">
                       {Math.round((students.filter(s => s.questionsAsked > 0).length / students.length) * 100)}%
                     </p>
-                  </div>
-                </div>
               </div>
             </div>
+          </div>
+        </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Recent Questions */}
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm">
-                <div className="p-6 border-b border-slate-200 dark:border-gray-700">
-                  <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Recent Questions</h2>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Latest student questions and AI responses</p>
-                </div>
-                <div className="p-6">
-                  <div className="space-y-4">
-                    {recentQuestions.map((item) => (
-                      <div key={item.id} className="flex items-start space-x-3">
-                        <div className={`p-2 rounded-lg ${
-                          item.status === 'answered' ? 'bg-green-100 dark:bg-green-900/20' : 'bg-yellow-100 dark:bg-yellow-900/20'
-                        }`}>
-                          <svg className={`w-4 h-4 ${
-                            item.status === 'answered' ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'
-                          }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            {item.status === 'answered' ? (
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                            ) : (
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            )}
-                          </svg>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-slate-900 dark:text-white">{item.question}</p>
-                          <div className="flex items-center mt-1 space-x-4">
-                            <span className="text-xs text-slate-500 dark:text-slate-400">{item.student}</span>
-                            <span className="text-xs text-slate-500 dark:text-slate-400">{item.timestamp}</span>
-                          </div>
-                        </div>
+          {/* Recent Questions */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+            <div className="p-6 border-b border-slate-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Recent Questions</h2>
+              <p className="text-sm text-slate-600 dark:text-slate-400">Latest student questions and AI responses</p>
+            </div>
+            <div className="p-6">
+              <div className="space-y-4">
+                {recentQuestions.map((item) => (
+                  <div key={item.id} className="flex items-start space-x-3">
+                    <div className={`p-2 rounded-lg ${
+                      item.status === 'answered' ? 'bg-green-100 dark:bg-green-900/20' : 'bg-yellow-100 dark:bg-yellow-900/20'
+                    }`}>
+                      <svg className={`w-4 h-4 ${
+                        item.status === 'answered' ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'
+                      }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {item.status === 'answered' ? (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        ) : (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        )}
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-slate-900 dark:text-white">{item.question}</p>
+                      <div className="flex items-center mt-1 space-x-4">
+                        <span className="text-xs text-slate-500 dark:text-slate-400">{item.student}</span>
+                        <span className="text-xs text-slate-500 dark:text-slate-400">{item.timestamp}</span>
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
+            </div>
+          </div>
 
-              {/* Weekly Engagement Chart */}
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm">
-                <div className="p-6 border-b border-slate-200 dark:border-gray-700">
+          {/* Weekly Engagement Chart */}
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+            <div className="p-6 border-b border-slate-200 dark:border-gray-700">
                   <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Weekly Activity</h2>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Student engagement and query patterns throughout the week</p>
-                </div>
-                <div className="p-6">
+            </div>
+            <div className="p-6">
                   <div className="space-y-6">
                     {/* Engagement Chart */}
                     <div>
                       <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Engagement Rate</h3>
-                      <div className="flex items-end justify-between h-32 space-x-2">
+              <div className="flex items-end justify-between h-32 space-x-2">
                         {weeklyEngagement.map((day, index) => {
                           // Use a simple approach: scale engagement from 40-100% to use more visual space
                           const height = Math.max((day.engagement - 20) * 1.2, 20);
@@ -583,16 +692,16 @@ export default function CourseDashboard() {
                           const height = Math.max(day.queries * 1.5 + 15, 20);
                           
                           return (
-                            <div key={index} className="flex flex-col items-center flex-1">
-                              <div 
+                  <div key={index} className="flex flex-col items-center flex-1">
+                    <div 
                                 className="w-full bg-green-600 dark:bg-green-500 rounded-t-sm transition-all duration-300 hover:bg-green-700 dark:hover:bg-green-400 cursor-pointer"
                                 style={{ 
                                   height: `${height}px`,
                                   minHeight: '16px'
                                 }}
                                 title={`${day.day}: ${day.queries} queries`}
-                              ></div>
-                              <span className="text-xs text-slate-500 dark:text-slate-400 mt-2">{day.day}</span>
+                    ></div>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 mt-2">{day.day}</span>
                               <span className="text-xs font-medium text-slate-700 dark:text-slate-300">{day.queries}</span>
                             </div>
                           );
@@ -715,68 +824,68 @@ export default function CourseDashboard() {
 
       case "materials":
         return (
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm">
-            <div className="p-6 border-b border-slate-200 dark:border-gray-700">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Course Materials</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+          <div className="p-6 border-b border-slate-200 dark:border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Course Materials</h2>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Manage uploaded files and their usage by the AI tutor</p>
-                </div>
+              </div>
                 <button 
                   onClick={() => setIsAddMaterialModalOpen(true)}
                   className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
                 >
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
-                  Add Material
-                </button>
-              </div>
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Add Material
+              </button>
             </div>
-            <div className="p-6">
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-slate-200 dark:divide-gray-700">
-                  <thead className="bg-slate-50 dark:bg-gray-700/50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          </div>
+          <div className="p-6">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-slate-200 dark:divide-gray-700">
+                <thead className="bg-slate-50 dark:bg-gray-700/50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         File Name
-                      </th>
+                    </th>
                       <th className="px-6 py-3 text-center text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         File Size
-                      </th>
-                      <th className="px-6 py-3 text-center text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         References
-                      </th>
-                      <th className="px-6 py-3 text-center text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Upload Date
-                      </th>
-                      <th className="relative px-6 py-3">
-                        <span className="sr-only">Actions</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white dark:bg-gray-800 divide-y divide-slate-200 dark:divide-gray-700">
-                    {materials.map((material) => (
-                      <tr key={material.id} className="hover:bg-slate-50 dark:hover:bg-gray-700/50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <div className="p-2 bg-slate-100 dark:bg-gray-700 rounded-lg mr-3">
-                              <svg className="w-4 h-4 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                              </svg>
-                            </div>
-                            <span className="text-sm font-medium text-slate-900 dark:text-white">{material.name}</span>
+                    </th>
+                    <th className="relative px-6 py-3">
+                      <span className="sr-only">Actions</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-slate-200 dark:divide-gray-700">
+                  {materials.map((material) => (
+                    <tr key={material.id} className="hover:bg-slate-50 dark:hover:bg-gray-700/50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="p-2 bg-slate-100 dark:bg-gray-700 rounded-lg mr-3">
+                            <svg className="w-4 h-4 text-slate-600 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
                           </div>
-                        </td>
+                          <span className="text-sm font-medium text-slate-900 dark:text-white">{material.name}</span>
+                        </div>
+                      </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-slate-600 dark:text-slate-400">
                           {material.size}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-slate-900 dark:text-white">
                           {material.references}
-                        </td>
+                      </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-slate-600 dark:text-slate-400">
-                          {material.uploadDate}
-                        </td>
+                        {material.uploadDate}
+                      </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button 
                             className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 px-3 py-1 rounded text-sm"
@@ -808,7 +917,10 @@ export default function CourseDashboard() {
                   <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Course Students</h2>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Manage student enrollments and view their activity</p>
                 </div>
-                <button className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+                <button 
+                  onClick={() => setIsAddStudentModalOpen(true)}
+                  className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+                >
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
@@ -855,26 +967,26 @@ export default function CourseDashboard() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-slate-600 dark:text-slate-400">
                           {student.questionsAsked}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-center">
-                          <div className="flex items-center justify-center">
-                            <div className="flex items-center space-x-2">
-                              <div className="w-16 bg-slate-200 dark:bg-gray-700 rounded-full h-2">
-                                <div 
-                                  className={`h-2 rounded-full ${
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-center">
+                        <div className="flex items-center justify-center">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-16 bg-slate-200 dark:bg-gray-700 rounded-full h-2">
+                              <div 
+                                className={`h-2 rounded-full ${
                                     student.engagement >= 80 ? 'bg-green-500' :
                                     student.engagement >= 60 ? 'bg-yellow-500' :
-                                    'bg-red-500'
-                                  }`}
+                                  'bg-red-500'
+                                }`}
                                   style={{ width: `${student.engagement}%` }}
-                                ></div>
-                              </div>
-                              <span className="text-sm font-medium text-slate-900 dark:text-white">
-                                {student.engagement}%
-                              </span>
+                              ></div>
                             </div>
+                            <span className="text-sm font-medium text-slate-900 dark:text-white">
+                                {student.engagement}%
+                            </span>
                           </div>
-                        </td>
+                        </div>
+                      </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-slate-600 dark:text-slate-400">
                           {student.lastActivity}
                         </td>
@@ -898,15 +1010,15 @@ export default function CourseDashboard() {
                             }}
                           >
                             Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
+        </div>
         );
 
       default:
@@ -990,6 +1102,9 @@ export default function CourseDashboard() {
 
         {/* Settings Modal */}
         <SettingsModal />
+
+        {/* Add Student Modal */}
+        <AddStudentModal />
       </div>
     </InstructorLayout>
   );
