@@ -413,9 +413,11 @@ export default function QuizTaking() {
               <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Quiz Details</h3>
                 <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                  {isReviewMode && <div>Last taken: 3 days ago</div>}
                   <div>Questions: {questions.length}</div>
                   <div>Time Limit: 30 minutes</div>
                   <div>Question Types: {quizConfig.questionTypes.map(type => type.replace('-', ' ')).join(', ')}</div>
+                  {isReviewMode && <div>Previous Score: 13/15 (87%)</div>}
                 </div>
               </div>
             </div>
