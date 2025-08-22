@@ -6,6 +6,7 @@ export default [
   route("/instructor/signin", "routes/instructor/signin.tsx"),
   route("/instructor/courses", "routes/instructor/courses.tsx"),
   route("/instructor/course/:courseId", "routes/instructor/course.$courseId.tsx"),
+  route("/instructor/settings", "routes/instructor/settings.tsx"),
   route("/courses", "routes/courses.tsx"),
   route("/course-sessions/:courseId", "routes/course-sessions.$courseId.tsx"),
   route("/chat", "routes/chat.tsx"),
