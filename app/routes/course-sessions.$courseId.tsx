@@ -540,7 +540,8 @@ function QuizCard({ quiz, onToggleFavourite, isCompact = false, courseTitle, cou
         <div className="flex items-center gap-4">
           <span>{quiz.timestamp}</span>
           <span>{quiz.questionCount} questions</span>
-          <span>{quiz.duration}</span>
+          <span>Time limit: {quiz.duration}</span>
+          <span>Question types: multiple-choice, true-false, short-answer</span>
           {quiz.score !== undefined && (
             <span className="font-medium">{quiz.score}/{quiz.maxScore}</span>
           )}
