@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { InstructorLayout } from "~/components/InstructorLayout";
 
 export function meta() {
@@ -15,52 +15,17 @@ export default function CourseDashboard() {
   const [isAddMaterialModalOpen, setIsAddMaterialModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isAddStudentModalOpen, setIsAddStudentModalOpen] = useState(false);
-  
-  // Mock data - in real app this would come from API based on courseId
-  const course = {
-    id: parseInt(courseId || "1"),
-    name: "Computer Programming 101",
-    code: "PROG-1400",
-    description: "Introduction to programming concepts and fundamentals",
-    semester: "Fall 2024",
-    activeStudents: 45,
-    totalQuestions: 234,
-    avgEngagement: 78,
-    recentActivity: "2 hours ago"
-  };
-
-  const recentQuestions = [
-    {
-      id: 1,
-      question: "How do I fix null pointer exceptions in Java?",
-      student: "John D.",
-      timestamp: "5 minutes ago",
-      status: "answered"
-    },
-    {
-      id: 2,
-      question: "What's the difference between public and private methods?",
-      student: "Sarah M.",
-      timestamp: "12 minutes ago",
-      status: "answered"
-    },
-    {
-      id: 3,
-      question: "How do arrays work in programming?",
-      student: "Mike R.",
-      timestamp: "25 minutes ago",
-      status: "pending"
-    },
-    {
-      id: 4,
-      question: "Can you explain loops and iteration?",
-      student: "Emma L.",
-      timestamp: "1 hour ago",
-      status: "answered"
-    }
-  ];
-
-  const materials = [
+  const [materialDeleteConfirmation, setMaterialDeleteConfirmation] = useState<{isOpen: boolean; materialId: number | null; materialName: string}>({
+    isOpen: false,
+    materialId: null,
+    materialName: ""
+  });
+  const [studentDeleteConfirmation, setStudentDeleteConfirmation] = useState<{isOpen: boolean; studentId: number | null; studentName: string}>({
+    isOpen: false,
+    studentId: null,
+    studentName: ""
+  });
+  const [materials, setMaterials] = useState([
     {
       id: 1,
       name: "Programming Fundamentals.pdf",
@@ -101,9 +66,8 @@ export default function CourseDashboard() {
       references: 45,
       effectiveness: 85
     }
-  ];
-
-  const students = [
+  ]);
+  const [students, setStudents] = useState([
     {
       id: 1,
       studentNumber: "S2024001",
@@ -149,6 +113,50 @@ export default function CourseDashboard() {
       engagement: 54,
       lastActivity: "2 days ago"
     }
+  ]);
+  
+  // Mock data - in real app this would come from API based on courseId
+  const course = {
+    id: parseInt(courseId || "1"),
+    name: "Computer Programming 101",
+    code: "PROG-1400",
+    description: "Introduction to programming concepts and fundamentals",
+    semester: "Fall 2024",
+    activeStudents: 45,
+    totalQuestions: 234,
+    avgEngagement: 78,
+    recentActivity: "2 hours ago"
+  };
+
+  const recentQuestions = [
+    {
+      id: 1,
+      question: "How do I fix null pointer exceptions in Java?",
+      student: "John D.",
+      timestamp: "5 minutes ago",
+      status: "answered"
+    },
+    {
+      id: 2,
+      question: "What's the difference between public and private methods?",
+      student: "Sarah M.",
+      timestamp: "12 minutes ago",
+      status: "answered"
+    },
+    {
+      id: 3,
+      question: "How do arrays work in programming?",
+      student: "Mike R.",
+      timestamp: "25 minutes ago",
+      status: "pending"
+    },
+    {
+      id: 4,
+      question: "Can you explain loops and iteration?",
+      student: "Emma L.",
+      timestamp: "1 hour ago",
+      status: "answered"
+    }
   ];
 
   const weeklyEngagement = [
@@ -191,6 +199,50 @@ export default function CourseDashboard() {
     // Handle add student logic here
     console.log('Adding student:', formData);
     setIsAddStudentModalOpen(false);
+  };
+
+  const handleDeleteMaterial = (materialId: number) => {
+    const material = materials.find(m => m.id === materialId);
+    if (material) {
+      setMaterialDeleteConfirmation({
+        isOpen: true,
+        materialId: materialId,
+        materialName: material.name
+      });
+    }
+  };
+
+  const confirmDeleteMaterial = () => {
+    if (materialDeleteConfirmation.materialId) {
+      setMaterials(materials.filter(material => material.id !== materialDeleteConfirmation.materialId));
+    }
+    setMaterialDeleteConfirmation({ isOpen: false, materialId: null, materialName: "" });
+  };
+
+  const cancelDeleteMaterial = () => {
+    setMaterialDeleteConfirmation({ isOpen: false, materialId: null, materialName: "" });
+  };
+
+  const handleDeleteStudent = (studentId: number) => {
+    const student = students.find(s => s.id === studentId);
+    if (student) {
+      setStudentDeleteConfirmation({
+        isOpen: true,
+        studentId: studentId,
+        studentName: student.name
+      });
+    }
+  };
+
+  const confirmDeleteStudent = () => {
+    if (studentDeleteConfirmation.studentId) {
+      setStudents(students.filter(student => student.id !== studentDeleteConfirmation.studentId));
+    }
+    setStudentDeleteConfirmation({ isOpen: false, studentId: null, studentName: "" });
+  };
+
+  const cancelDeleteStudent = () => {
+    setStudentDeleteConfirmation({ isOpen: false, studentId: null, studentName: "" });
   };
 
   const SettingsModal = () => {
@@ -546,6 +598,96 @@ export default function CourseDashboard() {
     );
   };
 
+  const MaterialDeleteConfirmationModal = () => {
+    if (!materialDeleteConfirmation.isOpen) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md">
+          <div className="flex items-center mb-4">
+            <div className="p-2 bg-red-100 dark:bg-red-900/20 rounded-lg mr-3">
+              <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Delete Material</h3>
+          </div>
+          
+          <div className="mb-6">
+            <p className="text-slate-600 dark:text-slate-400 mb-2">
+              Are you sure you want to delete this material? This action cannot be undone.
+            </p>
+            <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-3">
+              <p className="text-sm font-medium text-slate-900 dark:text-white">
+                {materialDeleteConfirmation.materialName}
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex justify-end space-x-3">
+            <button
+              onClick={cancelDeleteMaterial}
+              className="px-4 py-2 text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={confirmDeleteMaterial}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+            >
+              Delete Material
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const StudentDeleteConfirmationModal = () => {
+    if (!studentDeleteConfirmation.isOpen) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md">
+          <div className="flex items-center mb-4">
+            <div className="p-2 bg-red-100 dark:bg-red-900/20 rounded-lg mr-3">
+              <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Remove Student</h3>
+          </div>
+          
+          <div className="mb-6">
+            <p className="text-slate-600 dark:text-slate-400 mb-2">
+              Are you sure you want to remove this student from the course? This action cannot be undone.
+            </p>
+            <div className="bg-slate-100 dark:bg-gray-700 rounded-lg p-3">
+              <p className="text-sm font-medium text-slate-900 dark:text-white">
+                {studentDeleteConfirmation.studentName}
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex justify-end space-x-3">
+            <button
+              onClick={cancelDeleteStudent}
+              className="px-4 py-2 text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={confirmDeleteStudent}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+            >
+              Remove Student
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case "analytics":
@@ -889,12 +1031,7 @@ export default function CourseDashboard() {
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button 
                             className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 px-3 py-1 rounded text-sm"
-                            onClick={() => {
-                              if (window.confirm(`Are you sure you want to delete "${material.name}"?`)) {
-                                // Handle delete in real app
-                                console.log('Deleting material:', material.id);
-                              }
-                            }}
+                            onClick={() => handleDeleteMaterial(material.id)}
                           >
                             Delete
                           </button>
@@ -1002,12 +1139,7 @@ export default function CourseDashboard() {
                           </button>
                           <button 
                             className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 px-3 py-1 rounded text-sm"
-                            onClick={() => {
-                              if (window.confirm(`Are you sure you want to remove "${student.name}" from this course?`)) {
-                                // Handle delete in real app
-                                console.log('Deleting student:', student.id);
-                              }
-                            }}
+                            onClick={() => handleDeleteStudent(student.id)}
                           >
                             Delete
                         </button>
@@ -1105,6 +1237,12 @@ export default function CourseDashboard() {
 
         {/* Add Student Modal */}
         <AddStudentModal />
+
+        {/* Material Delete Confirmation Modal */}
+        <MaterialDeleteConfirmationModal />
+
+        {/* Student Delete Confirmation Modal */}
+        <StudentDeleteConfirmationModal />
       </div>
     </InstructorLayout>
   );
